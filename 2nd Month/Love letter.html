@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Monthsary Book ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#ffe6ee;
+font-family:Arial;
+overflow:hidden;
+}
+
+/* ENVELOPE */
+.envelope{
+width:360px;height:240px;
+position:relative;cursor:pointer;
+perspective: 1000px; /* Added for 3D flap flip */
+transition: opacity 0.5s ease 0.5s;
+z-index: 20;
+}
+
+.base{
+position:absolute;width:100%;height:100%;
+background:#e88aa0;border-radius:14px;
+z-index: 2;
+}
+
+.flap{
+position:absolute;
+width: 0;
+height: 0;
+border-left:180px solid transparent;
+border-right:180px solid transparent;
+border-top:130px solid #ffd0db;
+transform-origin:top;
+transition:0.7s ease;
+z-index: 3;
+}
+
+.seal{
+position:absolute;
+top:110px;left:50%;
+transform:translateX(-50%);
+width:66px;height:66px;
+background:radial-gradient(circle,#ff6b7a,#9b0016);
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size: 24px;
+z-index: 4;
+transition: 0.3s ease;
+}
+
+/* ENVELOPE OPEN STATE ANIMATIONS */
+.envelope.open .flap {
+transform: rotateX(180deg);
+z-index: 1;
+}
+
+.envelope.open .seal {
+opacity: 0;
+}
+
+.envelope.open {
+opacity: 0;
+pointer-events: none;
+}
+
+/* BOOK */
+.book{
+position:fixed;
+top:50%;left:50%;
+transform:translate(-50%,-50%) scale(0);
+width:420px;height:560px;
+background:#fffdf8;
+border-radius:14px;
+overflow:hidden;
+transition:0.5s ease 0.6s; /* Slight delay to let envelope open first */
+padding:15px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+z-index: 10;
+}
+
+.book.show{
+transform:translate(-50%,-50%) scale(1);
+}
+
+/* PAGE */
+.page{
+position:absolute;
+width:calc(100% - 30px);
+height:calc(100% - 60px);
+display:none;
+padding:20px;
+}
+
+.page.active{display:flex; flex-direction:column;}
+
+.title{
+font-family:'Great Vibes', cursive;
+font-size:42px;
+text-align:center;
+color:#d96c8d;
+margin-bottom:10px;
+}
+
+.content{
+font-size:15px;
+line-height:1.6;
+white-space:pre-wrap;
+}
+
+/* PHOTOS GRID */
+.photos{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+width:100%;
+height:100%;
+align-content:center;
+justify-items:center;
+}
+
+.photo{
+width:100%;
+max-width:160px;
+height:190px;
+overflow:hidden;
+border-radius:12px;
+box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+background: #eee; /* Fallback background color */
+}
+
+.photo img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* NAV */
+.nav{
+position:absolute;
+bottom:15px;right:15px;
+display:flex;gap:8px;
+z-index: 15;
+}
+
+button{
+padding:6px 10px;
+background:#d96c8d;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight: bold;
+}
+
+button:active {
+transform: scale(0.95);
+}
+
+/* hidden measurer */
+#measure{
+position:absolute;
+visibility:hidden;
+width:calc(420px - 70px);
+padding: 20px;
+font-size:15px;
+line-height:1.6;
+white-space:pre-wrap;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="envelope" id="env">
+  <div class="base"></div>
+  <div class="flap"></div>
+  <div class="seal">❤</div>
+</div>
+
+<div class="book" id="book">
+  <div id="pages"></div>
+
+  <div class="nav">
+    <button onclick="prevPage()">Prev</button>
+    <button onclick="nextPage()">Next</button>
+  </div>
+</div>
+
+<div id="measure"></div>
+
+<script>
+
+const letter = `You don't understand how much you actually mean to me and I care about you a lot more than myself! I would do anything for you! I just want to make you smile! You are amazing, beautiful, funny, have the world's most beautiful smile.
+
+When I see you or even get a simple text from you, my whole day brightens up. It's so amazing how you can say hey and put a smile on my face. I love when you laugh and I just love being with you! I'm so happy with you.
+
+I can't believe it's been 2 months that you and I have been together. You've brought so much happiness into my life and I can't possibly thank you enough. I can't wait to be able to live with you and show you how much I appreciate you and how important you are to me and that no matter what happens you've made an everlasting impression on me and I'm beyond thankful to have met you.
+
+There are a lot of things to thank you for that I don't even know where to begin but I do want to thank you for being there for me, treating me right, being the person I can tell anything to, being my weird best friend and most of all my beautiful caring wife.
+
+When I'm with you I'm happy, when we hug it's like I don't ever want to let go, when you make me smile it brings the sunshine out in me, when I see you and our eyes meet, it's like something I've never felt before.
+
+I know I'm not perfect. I know I have flaws. I know that I can be annoying and I know I can be quiet. I know I can be stupid sometimes. I might not ever seem stunning to you, but I can make you happy, make you smile, make you laugh, and make you feel wanted.
+
+If I had a penny for every time I thought about you, I would only have one, because you never leave my mind. You're my first thought when I wake up and my last thought when I go to bed. You have made me smile and laugh so many times this past month. You have always been there for me. Thank you for being you.
+
+You are so amazing and I am so lucky to call you my baby. I love you so much. I'm glad you and I are together. I love you baby!! You're mine, I'm yours, it's as simple as it is, nothing from my end is going to change that fact.
+
+Some people don't or won't understand, some even won't like it, but I choose you because my heart chose yours long before our bodies were born. I feel that we've loved one another in lifetimes ago. Whatever we don't get right this time, we will try again. So my love, I'm comforted by the fact that my love for you is eternal, and that I will see you in the next lifetime.
+
+I want you, and everything that comes with you. I want all your amazing aspects and all your terrifying sides. If there was a word to describe the feelings I have for you it would be incredible because it is incredible how much I love you, how much I care about you, how I look at you, how I talk about you, and it is really just incredible how much I want you.
+
+Yours always,
+With all my love,`;
+
+/* STATE */
+const env = document.getElementById("env");
+const book = document.getElementById("book");
+const pagesWrap = document.getElementById("pages");
+const measure = document.getElementById("measure");
+
+let pages = [];
+let pageTexts = [];
+let current = 0;
+
+/* OPEN */
+env.onclick = () => {
+env.classList.add("open");
+book.classList.add("show");
+
+buildPages();
+paginate();
+addPhotoPage(); 
+startTyping();
+showPage(0);
+};
+
+/* CREATE PAGE */
+function createPage(){
+const p = document.createElement("div");
+p.className = "page";
+p.innerHTML = `<div class="title">My Love</div><div class="content"></div>`;
+pagesWrap.appendChild(p);
+pages.push(p);
+return p;
+}
+
+/* RESET */
+function buildPages(){
+pagesWrap.innerHTML = "";
+pages = [];
+pageTexts = [];
+current = 0;
+createPage();
+}
+
+/* PARAGRAPH-BASED PAGINATION */
+function paginate(){
+let paragraphs = letter.split(/\n\s*\n/);
+let buffer = "";
+
+for(let i = 0; i < paragraphs.length; i++){
+let currentParagraph = paragraphs[i].trim();
+if (!currentParagraph) continue;
+
+let testBuffer = buffer ? buffer + "\n\n" + currentParagraph : currentParagraph;
+measure.innerHTML = `<div class="title">My Love</div><div class="content">${testBuffer}</div>`;
+
+if(measure.scrollHeight > 450){
+  if (buffer) {
+    pageTexts.push(buffer);
+    createPage();
+    buffer = currentParagraph;
+  } else {
+    pageTexts.push(currentParagraph);
+    createPage();
+    buffer = "";
+  }
+} else {
+  buffer = testBuffer;
+}
+}
+
+if(buffer.trim().length > 0){
+pageTexts.push(buffer);
+}
+}
+
+/* PHOTO PAGE INSERTER - ADD YOUR LINKS BELOW */
+function addPhotoPage() {
+const photoPage = document.createElement("div");
+photoPage.className = "page";
+photoPage.innerHTML = `
+<div class="title">Our Memories</div>
+<div class="photos">
+  <div class="photo"><img src="https://cdn.discordapp.com/attachments/1511013322479370473/1511013435742359552/20260408_102053.jpg?ex=6a26d16c&is=6a257fec&hm=860dd436f807b82cd01c5d6879068c78be636e34cdf1c2734d06dfc817bf4f63&" alt="Memory 1"></div>
+  <div class="photo"><img src="https://cdn.discordapp.com/attachments/1511013322479370473/1511013437675933829/Screenshot_20260406_005520_Discord.jpg?ex=6a26d16c&is=6a257fec&hm=5f46a0326b4ecf51d62768b5d4cbe36b9e8ee231b525796fcf2143df18759e19&"></div>
+  <div class="photo"><img src="https://cdn.discordapp.com/attachments/1511013322479370473/1511013436379627690/20260408_121548.jpg?ex=6a26d16c&is=6a257fec&hm=d9eedde645fd954181baeaaad8754c4569aa0c0cb153bb94153797587e419bfa&" alt="Memory 3"></div>
+  <div class="photo"><img src="https://cdn.discordapp.com/attachments/1511013322479370473/1511013437122023625/Screenshot_20260406_003806_Discord.jpg?ex=6a26d16c&is=6a257fec&hm=270042ba13abab762582667f1c616970cafc8e88734897862bf1c5ff906401d7&" alt="Memory 4"></div>
+</div>
+`;
+pagesWrap.appendChild(photoPage);
+pages.push(photoPage); 
+}
+
+/* FIXED TYPEWRITER */
+function startTyping(){
+let p = 0;
+let c = 0;
+
+function type(){
+if(p >= pageTexts.length) return;
+
+let page = pages[p];
+if(!page) return;
+
+let content = page.querySelector(".content");
+if(!content){
+p++;
+c=0;
+type();
+return;
+}
+
+let text = pageTexts[p];
+content.textContent = text.substring(0, c);
+c++;
+
+if(c > text.length){
+p++;
+c=0;
+setTimeout(type, 300);
+return;
+}
+
+setTimeout(type, 12);
+}
+
+type();
+}
+
+/* NAV */
+function showPage(i){
+pages.forEach((p,idx)=>{
+p.classList.toggle("active", idx === i);
+});
+current = i;
+}
+
+function nextPage(){
+if(current < pages.length - 1) showPage(current + 1);
+}
+
+function prevPage(){
+if(current > 0) showPage(current - 1);
+}
+
+</script>
+
+</body>
+</html>
