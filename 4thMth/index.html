@@ -20,6 +20,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
 
 <style>
   :root{
@@ -105,8 +106,8 @@
   .lane-label{ font-family:'Sora',sans-serif; font-weight:700; font-size:1.02rem; padding:14px 18px 2px; color:var(--violet); }
   .lane-caption{ font-size:0.85rem; padding:0 18px; color:#5C5468; line-height:1.45; }
 
-  .segmented{ display:flex; gap:5px; background:#EFE8FA; padding:4px; border-radius:14px; margin-bottom:16px; }
-  .segmented button{ flex:1; border:none; background:transparent; padding:9px 4px; border-radius:11px; font-size:0.7rem; font-weight:700; color:var(--muted); cursor:pointer; }
+  .segmented{ display:flex; flex-wrap:wrap; gap:5px; background:#EFE8FA; padding:4px; border-radius:14px; margin-bottom:16px; }
+  .segmented button{ flex:1 1 30%; min-width:80px; border:none; background:transparent; padding:9px 4px; border-radius:11px; font-size:0.7rem; font-weight:700; color:var(--muted); cursor:pointer; }
   .segmented button.active{ background:#fff; color:var(--violet); box-shadow:0 2px 6px rgba(43,33,64,0.08); }
   .more-section{ display:none; }
   .more-section.active{ display:block; }
@@ -154,11 +155,79 @@
   .conn-dot{ display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; }
   .conn-dot.ok{ background:#3DDC97; } .conn-dot.bad{ background:#FF7A93; }
   #conn-status{ font-size:0.68rem; color:var(--muted2); text-align:center; padding:2px 0 6px; }
+
+  /* Dark mode */
+  body.dark-bg{ background:#1B1526; }
+  #app[data-dark="true"]{ --bg:#1B1526; --ink:#EDE6FA; --muted:#8C81A6; --muted2:#6F6488; --card-border:#332B44; }
+  #app[data-dark="true"] .ui-card{ background:#241D33; border-color:rgba(255,255,255,0.05); box-shadow:0 2px 6px rgba(0,0,0,0.25),0 14px 30px rgba(0,0,0,0.35); }
+  #app[data-dark="true"] .partner-card{ background:linear-gradient(135deg,#241D33,#2A2240); }
+  #app[data-dark="true"] .status-chip,
+  #app[data-dark="true"] .mood-chip,
+  #app[data-dark="true"] .lane-card,
+  #app[data-dark="true"] .lane-add-btn{ background:#241D33; }
+  #app[data-dark="true"] .nav-bar{ background:#241D33; }
+  #app[data-dark="true"] .segmented{ background:#2A2240; }
+  #app[data-dark="true"] .segmented button.active{ background:#241D33; }
+  #app[data-dark="true"] .wish-input, #app[data-dark="true"] .capsule-textarea,
+  #app[data-dark="true"] .capsule-date, #app[data-dark="true"] .date-input-text,
+  #app[data-dark="true"] .date-input-date{ background:#1B1526; color:var(--ink); border-color:var(--card-border); }
+
+  /* Theme picker */
+  .theme-swatch-row{ display:flex; gap:10px; margin:10px 0 4px; }
+  .theme-swatch{ width:36px; height:36px; border-radius:50%; cursor:pointer; border:2px solid transparent; padding:0; }
+  .theme-swatch.active{ border-color:var(--ink); }
+
+  /* Settings rows + toggle switch */
+  .settings-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--card-border); }
+  .settings-row:last-child{ border-bottom:none; }
+  .toggle-switch{ width:44px; height:26px; border-radius:999px; background:var(--card-border); position:relative; cursor:pointer; transition: background 0.2s ease; flex-shrink:0; }
+  .toggle-switch.on{ background:var(--violet); }
+  .toggle-switch .knob{ position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%; background:#fff; transition: transform 0.2s ease; box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+  .toggle-switch.on .knob{ transform: translateX(18px); }
+
+  /* On my way */
+  .onway-btn{ width:100%; background:linear-gradient(135deg,var(--violet),var(--violet2)); color:#fff; border:none; padding:14px; border-radius:16px; font-weight:800; font-family:'Sora',sans-serif; font-size:0.92rem; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; margin-top:10px; }
+
+  /* Toast */
+  #toast{ position:fixed; top:calc(16px + env(safe-area-inset-top)); left:50%; transform:translateX(-50%) translateY(-20px); background:var(--ink); color:#fff; padding:10px 18px; border-radius:999px; font-size:0.82rem; font-weight:700; z-index:60; opacity:0; pointer-events:none; transition: all 0.3s ease; max-width:80%; text-align:center; }
+  #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* Important dates */
+  .date-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--card-border); gap:10px; }
+  .date-row:last-child{ border-bottom:none; }
+  .date-label{ font-size:0.88rem; font-weight:600; }
+  .date-meta{ font-size:0.7rem; color:var(--muted2); }
+  .date-countdown{ font-family:'Sora',sans-serif; font-weight:800; color:var(--violet); font-size:0.95rem; text-align:right; white-space:nowrap; }
+  .date-add-row{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .date-input-text, .date-input-date{ border:1.5px solid var(--card-border); border-radius:12px; padding:10px 14px; font-family:'Manrope',sans-serif; font-size:0.85rem; flex:1; min-width:120px; }
+
+  /* Mood heatmap */
+  .heatmap-title{ font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); font-weight:700; margin:4px 0 10px; }
+  .heatmap-grid{ display:grid; grid-template-columns: repeat(10, 1fr); gap:4px; }
+  .heatmap-cell{ aspect-ratio:1/1; border-radius:3px; background:var(--card-border); }
+  .heatmap-cell.one{ background:#D9C4F5; }
+  .heatmap-cell.both{ background:var(--violet); }
+
+  /* Memory lane "add" card */
+  .lane-add-btn{ flex:0 0 78%; scroll-snap-align:center; border:2px dashed var(--card-border); border-radius:20px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:var(--muted); font-size:0.85rem; font-weight:700; cursor:pointer; aspect-ratio:4/5; background:none; }
+  .lane-add-btn .plus-icon{ font-size:2rem; }
+  .lane-delete-btn{ position:absolute; top:8px; right:8px; width:26px; height:26px; border-radius:50%; background:rgba(0,0,0,0.55); color:#fff; border:none; font-size:0.8rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .lane-card{ position:relative; }
+
+  /* Voice notes */
+  .voice-row{ display:flex; flex-direction:column; gap:4px; padding:12px 0; border-bottom:1px solid var(--card-border); }
+  .voice-row:last-child{ border-bottom:none; }
+  .voice-row audio{ width:100%; }
+  .voice-meta{ font-size:0.7rem; color:var(--muted2); }
+  .record-btn{ width:100%; background:linear-gradient(135deg,var(--pink),#FF9F45); color:#fff; border:none; padding:15px; border-radius:16px; font-weight:800; font-family:'Sora',sans-serif; font-size:0.95rem; cursor:pointer; margin-top:6px; }
+  .record-btn.recording{ background:#E11D48; animation:pulseRec 1s infinite; }
+  @keyframes pulseRec{ 0%,100%{ opacity:1; } 50%{ opacity:0.6; } }
 </style>
 </head>
 <body>
 
 <canvas id="spark-canvas"></canvas>
+<div id="toast"></div>
 
 <div id="app">
   <div id="identity-screen">
@@ -198,6 +267,9 @@
         <div class="spark-type-row" id="spark-type-row"></div>
         <button class="spark-btn" id="spark-btn"><span>✨</span> Send it</button>
         <div class="spark-flash" id="spark-flash"></div>
+
+        <button class="onway-btn" id="onway-btn">🚗 I'm on my way</button>
+        <div class="spark-flash" id="onway-flash"></div>
       </div>
 
       <div class="tab-panel" id="panel-roulette">
@@ -212,7 +284,8 @@
       </div>
 
       <div class="tab-panel" id="panel-lane">
-        <div class="ui-label" style="padding:0 0 12px;">Swipe through the last 4 months</div>
+        <div class="ui-label" style="padding:0 0 12px;">Swipe through your memories</div>
+        <input type="file" id="memory-file-input" accept="image/*" style="display:none;">
         <div class="lane-scroller" id="lane-scroller"></div>
       </div>
 
@@ -221,7 +294,10 @@
           <button class="active" data-section="activity">Activity</button>
           <button data-section="wishlist">Wishlist</button>
           <button data-section="capsule">Capsule</button>
+          <button data-section="dates">Dates</button>
+          <button data-section="voice">Voice</button>
           <button data-section="stats">Stats</button>
+          <button data-section="settings">Settings</button>
         </div>
 
         <div class="more-section active" id="section-activity">
@@ -250,13 +326,57 @@
           </div>
         </div>
 
+        <div class="more-section" id="section-dates">
+          <div class="ui-card">
+            <div id="dates-list"><div class="empty-note">No important dates yet.</div></div>
+            <div class="date-add-row">
+              <input class="date-input-text" id="date-label-input" type="text" placeholder="What's the occasion?">
+              <input class="date-input-date" id="date-value-input" type="date">
+            </div>
+            <label style="display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--muted); margin-top:8px;">
+              <input type="checkbox" id="date-recurring-input"> Repeats every year
+            </label>
+            <button class="add-btn" id="date-add-btn" style="width:100%; margin-top:10px; padding:12px;">Add date</button>
+          </div>
+        </div>
+
+        <div class="more-section" id="section-voice">
+          <div class="ui-card">
+            <div id="voice-list"><div class="empty-note">No voice notes yet.</div></div>
+            <button class="record-btn" id="record-btn">🎙️ Record a voice note</button>
+            <div class="hint-text" style="margin-top:10px;">Max 20 seconds per note.</div>
+          </div>
+        </div>
+
         <div class="more-section" id="section-stats">
+          <div class="ui-card">
+            <div class="heatmap-title">Last 10 weeks</div>
+            <div class="heatmap-grid" id="heatmap-grid"></div>
+          </div>
           <div class="ui-card">
             <div class="stat-row"><span class="stat-label">Sparks sent (you)</span><span class="stat-num" id="stat-my-sparks">0</span></div>
             <div class="stat-row"><span class="stat-label">Sparks received</span><span class="stat-num" id="stat-their-sparks">0</span></div>
             <div class="stat-row"><span class="stat-label">Current streak</span><span class="stat-num" id="stat-streak">0 days</span></div>
             <div class="stat-row"><span class="stat-label">Wishlist items done</span><span class="stat-num" id="stat-wishlist">0</span></div>
             <div class="stat-row"><span class="stat-label">Letters sealed</span><span class="stat-num" id="stat-capsules">0</span></div>
+          </div>
+        </div>
+
+        <div class="more-section" id="section-settings">
+          <div class="ui-card">
+            <div class="settings-row">
+              <span class="stat-label">Dark mode</span>
+              <div class="toggle-switch" id="dark-toggle"><div class="knob"></div></div>
+            </div>
+          </div>
+          <div class="ui-card">
+            <div class="ui-label">Accent theme</div>
+            <div class="theme-swatch-row" id="theme-swatch-row"></div>
+          </div>
+          <div class="ui-card">
+            <div class="ui-label">Notifications</div>
+            <div id="push-status" style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">Get notified even when the app is closed.</div>
+            <button class="add-btn" id="push-enable-btn" style="width:100%; padding:12px;">Enable push notifications</button>
           </div>
         </div>
       </div>
@@ -294,6 +414,18 @@ const rouletteHistoryRef = db.ref("roulette/history");
 const rouletteFavRef = db.ref("roulette/favorites");
 const wishlistRef = db.ref("wishlist");
 const capsulesRef = db.ref("capsules");
+const datesRef = db.ref("dates");
+const lanePhotosRef = db.ref("lanePhotos");
+const voiceNotesRef = db.ref("voiceNotes");
+const tokensRef = db.ref("tokens");
+
+/* For real push notifications (works even if the app is fully closed):
+   1. Firebase Console → Project settings → Cloud Messaging → Web Push certificates → Generate key pair
+   2. Paste that key below
+   3. Deploy the Cloud Function in the separate functions/ package to actually send the push */
+const VAPID_KEY = "YOUR_VAPID_KEY";
+let messaging = null;
+try { messaging = firebase.messaging(); } catch(e) { /* messaging unsupported in this browser, skip */ }
 /* ========================================================= */
 
 const STATUSES = [
@@ -329,10 +461,10 @@ const SPOTS = [
   { name: "Sentosa boardwalk + beach", area: "Sentosa", moods: ["active", "scenic", "food"], desc: "Walk in over the boardwalk instead of the cable car, then pick a beach club for sunset drinks." },
 ];
 const LANE = [
-  { photo: "PHOTO1", label: "Month one", caption: "[Edit me: the first time we hung out]" },
-  { photo: "PHOTO2", label: "Month two", caption: "[Edit me: a memory from month two]" },
-  { photo: "PHOTO3", label: "Month three", caption: "[Edit me: your favourite bit from month three]" },
-  { photo: "PHOTO4", label: "Month four", caption: "[Edit me: right now, what you're grateful for]" },
+  { photo: "PHOTO4", label: "Month one", caption: "[Edit me: the first time we hung out]" },
+  { photo: "PHOTO3", label: "Month two", caption: "[Edit me: a memory from month two]" },
+  { photo: "PHOTO2", label: "Month three", caption: "[Edit me: your favourite bit from month three]" },
+  { photo: "PHOTO1", label: "Month four", caption: "[Edit me: right now, what you're grateful for]" },
 ];
 
 function timeAgo(ts){
@@ -350,6 +482,7 @@ function safeKey(s){ return s.replace(/[.#$\[\]/]/g, "_"); }
 
 let identity = localStorage.getItem("us-identity");
 let lastSeenSpark = localStorage.getItem("us-last-seen-spark");
+let lastSeenOnway = localStorage.getItem("us-last-seen-onway");
 let presenceState = { darrian: { status: "Free" }, karis: { status: "Free" } };
 let selectedSparkType = SPARK_TYPES[0].key;
 let currentResultSpot = null;
@@ -383,7 +516,12 @@ function startApp(){
   listenRoulette();
   listenWishlist();
   listenCapsules();
+  listenDates();
+  listenVoiceNotes();
   fetchWeather();
+  initDarkMode();
+  buildThemeSwatches();
+  setupPushButton();
   if("Notification" in window && Notification.permission === "default"){
     Notification.requestPermission();
   }
@@ -436,7 +574,7 @@ function listenPresence(){
     document.getElementById("conn-dot").className = "conn-dot ok";
     document.getElementById("conn-label").textContent = "live";
     const data = snap.val() || {};
-    presenceState = { darrian: data.darrian || {status:"Free"}, karis: data.karis || {status:"Free"}, spark: data.spark || null };
+    presenceState = { darrian: data.darrian || {status:"Free"}, karis: data.karis || {status:"Free"}, spark: data.spark || null, onway: data.onway || null };
     const other = identity === "darrian" ? "karis" : "darrian";
     const otherData = presenceState[other] || {};
     document.getElementById("partner-status").textContent = otherData.status || "Free";
@@ -451,6 +589,16 @@ function listenPresence(){
       const senderName = presenceState.spark.from === "darrian" ? "Darrian" : "Karis";
       if("Notification" in window && Notification.permission === "granted"){
         try{ new Notification(`${senderName} sent you a spark ${type.emoji}`, { body: type.label }); }catch(e){}
+      }
+    }
+
+    if(presenceState.onway && presenceState.onway.id !== lastSeenOnway && presenceState.onway.from !== identity){
+      lastSeenOnway = presenceState.onway.id;
+      localStorage.setItem("us-last-seen-onway", lastSeenOnway);
+      const senderName = presenceState.onway.from === "darrian" ? "Darrian" : "Karis";
+      showToast(`🚗 ${senderName} is on their way!`);
+      if("Notification" in window && Notification.permission === "granted"){
+        try{ new Notification(`${senderName} is on their way 🚗`); }catch(e){}
       }
     }
   }, ()=>{
@@ -468,6 +616,25 @@ document.getElementById("spark-btn").addEventListener("click", ()=>{
   activityRef.push({ type:"spark", who:identity, detail:`sent a ${typeInfo.label} spark ${typeInfo.emoji}`, timestamp: firebase.database.ServerValue.TIMESTAMP });
   const flash = document.getElementById("spark-flash");
   flash.textContent = "Sent ✨ they'll feel it any second.";
+  setTimeout(()=> flash.textContent = "", 2400);
+});
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=> t.classList.remove("show"), 3500);
+}
+
+document.getElementById("onway-btn").addEventListener("click", ()=>{
+  const id = `${identity}-onway-${Date.now()}`;
+  lastSeenOnway = id;
+  localStorage.setItem("us-last-seen-onway", id);
+  presenceRef.child("onway").set({ from: identity, id, timestamp: firebase.database.ServerValue.TIMESTAMP });
+  activityRef.push({ type:"onway", who:identity, detail:"is on their way 🚗", timestamp: firebase.database.ServerValue.TIMESTAMP });
+  const flash = document.getElementById("onway-flash");
+  flash.textContent = "Sent 🚗 they'll see it now.";
   setTimeout(()=> flash.textContent = "", 2400);
 });
 
@@ -522,7 +689,27 @@ function listenStreak(){
       badge.style.display = "none";
     }
     document.getElementById("stat-streak").textContent = streak + (streak===1 ? " day" : " days");
+    renderHeatmap(checkins);
   });
+}
+
+function renderHeatmap(checkins){
+  const grid = document.getElementById("heatmap-grid");
+  if(!grid) return;
+  grid.innerHTML = "";
+  const today = new Date();
+  for(let i=69; i>=0; i--){
+    const d = new Date(today);
+    d.setDate(d.getDate()-i);
+    const key = todayStr(d);
+    const entry = checkins[key];
+    const cell = document.createElement("div");
+    const both = entry && entry.darrian && entry.karis;
+    const one = entry && (entry.darrian || entry.karis);
+    cell.className = "heatmap-cell" + (both ? " both" : (one ? " one" : ""));
+    cell.title = key;
+    grid.appendChild(cell);
+  }
 }
 
 // ---------- Activity feed ----------
@@ -537,7 +724,8 @@ function listenActivity(){
     } else {
       list.innerHTML = items.map(it=>{
         const who = it.who === "darrian" ? "Darrian" : "Karis";
-        const icon = it.type === "spark" ? "✨" : "🔄";
+        const icons = { spark:"✨", onway:"🚗", photo:"📸", voice:"🎙️", status:"🔄" };
+        const icon = icons[it.type] || "🔄";
         return `<div class="activity-row"><div class="activity-icon">${icon}</div><div class="activity-text"><strong>${who}</strong> ${it.detail}</div><div class="activity-time">${timeAgo(it.timestamp)}</div></div>`;
       }).join("");
     }
@@ -674,20 +862,84 @@ function listenRoulette(){
   });
 }
 
-// ---------- Memory Lane ----------
+// ---------- Memory Lane (growable) ----------
+let dynamicLanePhotos = [];
+
 function buildLane(){
+  renderLane();
+  lanePhotosRef.orderByChild("timestamp").on("value", (snap)=>{
+    dynamicLanePhotos = [];
+    snap.forEach(child => dynamicLanePhotos.push({ id: child.key, ...child.val() }));
+    renderLane();
+  });
+  document.getElementById("memory-file-input").addEventListener("change", handlePhotoUpload);
+}
+
+function renderLane(){
   const scroller = document.getElementById("lane-scroller");
   scroller.innerHTML = "";
+
   LANE.forEach(item=>{
     const card = document.createElement("div");
     card.className = "lane-card";
     card.innerHTML = `<img src="data:image/jpeg;base64,${window[item.photo]}" alt="${item.label}" draggable="false"><div class="lane-label">${item.label}</div><div class="lane-caption">${item.caption}</div>`;
     scroller.appendChild(card);
   });
+
+  dynamicLanePhotos.forEach(item=>{
+    const card = document.createElement("div");
+    card.className = "lane-card";
+    const who = item.addedBy === "darrian" ? "Darrian" : "Karis";
+    card.innerHTML = `
+      <img src="${item.data}" alt="memory" draggable="false">
+      <button class="lane-delete-btn" data-id="${item.id}">×</button>
+      <div class="lane-label">Added by ${who}</div>
+      <div class="lane-caption">${item.caption || ""}</div>
+    `;
+    scroller.appendChild(card);
+  });
+  scroller.querySelectorAll(".lane-delete-btn").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      lanePhotosRef.child(btn.dataset.id).remove();
+    });
+  });
+
+  const addBtn = document.createElement("button");
+  addBtn.className = "lane-add-btn";
+  addBtn.innerHTML = `<span class="plus-icon">+</span><span>Add a memory</span>`;
+  addBtn.addEventListener("click", ()=> document.getElementById("memory-file-input").click());
+  scroller.appendChild(addBtn);
+
   let dragging = false, startX = 0, startScroll = 0;
   scroller.addEventListener("pointerdown", (e)=>{ dragging = true; startX = e.clientX; startScroll = scroller.scrollLeft; });
   scroller.addEventListener("pointermove", (e)=>{ if(!dragging) return; scroller.scrollLeft = startScroll - (e.clientX - startX); });
   window.addEventListener("pointerup", ()=> dragging = false);
+}
+
+function handlePhotoUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const maxDim = 900;
+      let w = img.width, h = img.height;
+      if(w >= h && w > maxDim){ h = Math.round(h * (maxDim / w)); w = maxDim; }
+      else if(h > maxDim){ w = Math.round(w * (maxDim / h)); h = maxDim; }
+      const canvas = document.createElement("canvas");
+      canvas.width = w; canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.75);
+      const caption = (prompt("Add a caption (optional):") || "").slice(0, 140);
+      lanePhotosRef.push({ data: dataUrl, caption, addedBy: identity, timestamp: firebase.database.ServerValue.TIMESTAMP });
+      activityRef.push({ type:"photo", who: identity, detail:"added a new memory 📸", timestamp: firebase.database.ServerValue.TIMESTAMP });
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = "";
 }
 
 // ---------- Wishlist ----------
@@ -759,6 +1011,212 @@ document.getElementById("capsule-add-btn").addEventListener("click", ()=>{
   document.getElementById("capsule-text").value = "";
   document.getElementById("capsule-date").value = "";
 });
+
+// ---------- Important dates ----------
+function nextOccurrence(dateStr, recurring){
+  let target = new Date(dateStr + "T00:00:00");
+  const now = new Date();
+  const nowMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if(recurring){
+    target = new Date(now.getFullYear(), target.getMonth(), target.getDate());
+    if(target < nowMid){ target = new Date(now.getFullYear()+1, target.getMonth(), target.getDate()); }
+  }
+  const diff = Math.round((target - nowMid) / 86400000);
+  return diff;
+}
+
+function listenDates(){
+  datesRef.orderByChild("timestamp").on("value", (snap)=>{
+    const items = [];
+    snap.forEach(child => items.push({ id: child.key, ...child.val() }));
+    items.forEach(it => it._diff = nextOccurrence(it.date, it.recurring));
+    items.sort((a,b) => a._diff - b._diff);
+    const list = document.getElementById("dates-list");
+    if(items.length === 0){
+      list.innerHTML = `<div class="empty-note">No important dates yet.</div>`;
+    } else {
+      list.innerHTML = items.map(it=>{
+        const dateObj = new Date(it.date + "T00:00:00");
+        const dateStr = dateObj.toLocaleDateString([], { month:"short", day:"numeric", year: it.recurring ? undefined : "numeric" });
+        let countdownText;
+        if(it._diff === 0) countdownText = "today!";
+        else if(it._diff > 0) countdownText = `in ${it._diff}d`;
+        else countdownText = `${Math.abs(it._diff)}d ago`;
+        return `<div class="date-row">
+          <div>
+            <div class="date-label">${it.label}</div>
+            <div class="date-meta">${dateStr}${it.recurring ? " · yearly" : ""}</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="date-countdown">${countdownText}</div>
+            <button class="fav-btn" data-id="${it.id}" style="font-size:1rem;">🗑️</button>
+          </div>
+        </div>`;
+      }).join("");
+      list.querySelectorAll("button[data-id]").forEach(btn=>{
+        btn.addEventListener("click", ()=> datesRef.child(btn.dataset.id).remove());
+      });
+    }
+  });
+}
+
+document.getElementById("date-add-btn").addEventListener("click", ()=>{
+  const label = document.getElementById("date-label-input").value.trim();
+  const dateVal = document.getElementById("date-value-input").value;
+  const recurring = document.getElementById("date-recurring-input").checked;
+  if(!label || !dateVal) return;
+  datesRef.push({ label, date: dateVal, recurring, addedBy: identity, timestamp: firebase.database.ServerValue.TIMESTAMP });
+  document.getElementById("date-label-input").value = "";
+  document.getElementById("date-value-input").value = "";
+  document.getElementById("date-recurring-input").checked = false;
+});
+
+// ---------- Voice notes ----------
+let mediaRecorder = null, recordedChunks = [], recordStopTimer = null;
+
+function listenVoiceNotes(){
+  voiceNotesRef.orderByChild("timestamp").limitToLast(20).on("value", (snap)=>{
+    const items = [];
+    snap.forEach(child => items.push({ id: child.key, ...child.val() }));
+    items.reverse();
+    const list = document.getElementById("voice-list");
+    if(items.length === 0){
+      list.innerHTML = `<div class="empty-note">No voice notes yet.</div>`;
+      return;
+    }
+    list.innerHTML = items.map(it=>{
+      const who = it.addedBy === "darrian" ? "Darrian" : "Karis";
+      return `<div class="voice-row">
+        <audio controls src="${it.data}"></audio>
+        <div class="voice-meta">${who} · ${timeAgo(it.timestamp)}</div>
+      </div>`;
+    }).join("");
+  });
+}
+
+document.getElementById("record-btn").addEventListener("click", toggleRecording);
+
+function toggleRecording(){
+  const btn = document.getElementById("record-btn");
+  if(mediaRecorder && mediaRecorder.state === "recording"){
+    mediaRecorder.stop();
+    return;
+  }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    alert("Voice recording isn't supported in this browser.");
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream=>{
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = (e)=>{ if(e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = ()=>{
+      stream.getTracks().forEach(t => t.stop());
+      clearTimeout(recordStopTimer);
+      btn.classList.remove("recording");
+      btn.textContent = "🎙️ Record a voice note";
+      const blob = new Blob(recordedChunks, { type: "audio/webm" });
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        voiceNotesRef.push({ data: reader.result, addedBy: identity, timestamp: firebase.database.ServerValue.TIMESTAMP });
+        activityRef.push({ type:"voice", who: identity, detail:"sent a voice note 🎙️", timestamp: firebase.database.ServerValue.TIMESTAMP });
+      };
+      reader.readAsDataURL(blob);
+    };
+    mediaRecorder.start();
+    btn.classList.add("recording");
+    btn.textContent = "⏹ Recording... (tap to stop)";
+    recordStopTimer = setTimeout(()=>{
+      if(mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop();
+    }, 20000);
+  }).catch(()=>{
+    alert("Couldn't access the microphone — check your browser/app permissions.");
+  });
+}
+
+// ---------- Dark mode ----------
+function initDarkMode(){
+  const saved = localStorage.getItem("us-dark") === "true";
+  setDarkMode(saved);
+  document.getElementById("dark-toggle").addEventListener("click", ()=>{
+    setDarkMode(localStorage.getItem("us-dark") !== "true");
+  });
+}
+function setDarkMode(on){
+  document.getElementById("app").setAttribute("data-dark", on ? "true" : "false");
+  document.getElementById("dark-toggle").classList.toggle("on", on);
+  document.body.classList.toggle("dark-bg", on);
+  localStorage.setItem("us-dark", on ? "true" : "false");
+}
+
+// ---------- Theme picker ----------
+const THEMES = [
+  { key:"violet", violet:"#8B5CF6", violet2:"#A855F7", pink:"#FF7A93" },
+  { key:"teal",   violet:"#14B8A6", violet2:"#2DD4BF", pink:"#FB923C" },
+  { key:"blue",   violet:"#3B82F6", violet2:"#60A5FA", pink:"#F59E0B" },
+  { key:"rose",   violet:"#E11D48", violet2:"#FB7185", pink:"#F472B6" },
+];
+function applyTheme(key){
+  const t = THEMES.find(x => x.key === key) || THEMES[0];
+  document.documentElement.style.setProperty("--violet", t.violet);
+  document.documentElement.style.setProperty("--violet2", t.violet2);
+  document.documentElement.style.setProperty("--pink", t.pink);
+  localStorage.setItem("us-theme", t.key);
+  document.querySelectorAll(".theme-swatch").forEach(s => s.classList.toggle("active", s.dataset.key === t.key));
+}
+function buildThemeSwatches(){
+  const row = document.getElementById("theme-swatch-row");
+  row.innerHTML = "";
+  THEMES.forEach(t=>{
+    const btn = document.createElement("button");
+    btn.className = "theme-swatch";
+    btn.dataset.key = t.key;
+    btn.style.background = `linear-gradient(135deg, ${t.violet}, ${t.pink})`;
+    btn.addEventListener("click", ()=> applyTheme(t.key));
+    row.appendChild(btn);
+  });
+  applyTheme(localStorage.getItem("us-theme") || "violet");
+}
+
+// ---------- Push notifications (background) ----------
+function setupPushButton(){
+  const btn = document.getElementById("push-enable-btn");
+  const statusEl = document.getElementById("push-status");
+  if(!messaging){
+    statusEl.textContent = "Push notifications aren't supported in this browser.";
+    btn.disabled = true;
+    return;
+  }
+  if(localStorage.getItem("us-push-enabled") === "true"){
+    statusEl.textContent = "Push notifications are on for this device.";
+    btn.textContent = "Re-sync notifications";
+  }
+  btn.addEventListener("click", async ()=>{
+    try{
+      const permission = await Notification.requestPermission();
+      if(permission !== "granted"){
+        statusEl.textContent = "Notifications were blocked — enable them in your browser/app settings.";
+        return;
+      }
+      const registration = await navigator.serviceWorker.ready;
+      const token = await messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: registration });
+      if(token){
+        await tokensRef.child(identity).set({ token, updatedAt: firebase.database.ServerValue.TIMESTAMP });
+        localStorage.setItem("us-push-enabled", "true");
+        statusEl.textContent = "Push notifications are on for this device.";
+        btn.textContent = "Re-sync notifications";
+      }
+    }catch(err){
+      statusEl.textContent = "Couldn't set up push notifications on this device.";
+    }
+  });
+  if(messaging.onMessage){
+    messaging.onMessage((payload)=>{
+      const n = payload.notification || {};
+      showToast(`${n.title || "New message"}${n.body ? " — " + n.body : ""}`);
+    });
+  }
+}
 
 // ---------- Tabs ----------
 const tabOrder = ["presence","roulette","lane","more"];

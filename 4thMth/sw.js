@@ -1,5 +1,37 @@
-const CACHE_NAME = "us-app-cache-v1";
+const CACHE_NAME = "us-app-cache-v2";
 const APP_SHELL = ["./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
+
+/* ---- Push notifications (background) ----
+   PASTE THE SAME firebaseConfig OBJECT YOU USED IN index.html BELOW.
+   If you're not setting up push notifications yet, you can leave this
+   as-is — it just won't do anything until real values are filled in. */
+importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js");
+
+firebase.initializeApp({
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+});
+
+try {
+  const messaging = firebase.messaging();
+  messaging.onBackgroundMessage((payload) => {
+    const title = (payload.notification && payload.notification.title) || "Us";
+    const body = (payload.notification && payload.notification.body) || "";
+    self.registration.showNotification(title, {
+      body,
+      icon: "icon-192.png",
+      badge: "icon-192.png",
+    });
+  });
+} catch (e) {
+  // messaging not configured yet, that's fine
+}
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
