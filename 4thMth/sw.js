@@ -11,7 +11,7 @@ importScripts("https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-com
 firebase.initializeApp({
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  databaseURL: "https://me-and-karis-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "YOUR_PROJECT",
   storageBucket: "YOUR_PROJECT.appspot.com",
   messagingSenderId: "YOUR_SENDER_ID",
