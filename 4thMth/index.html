@@ -407,6 +407,18 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+db.ref(".info/connected").on("value", (snap)=>{
+  const dot = document.getElementById("conn-dot");
+  const label = document.getElementById("conn-label");
+  if(!dot || !label) return;
+  if(snap.val() === true){
+    dot.className = "conn-dot ok";
+    label.textContent = "live";
+  } else {
+    dot.className = "conn-dot bad";
+    label.textContent = "connecting...";
+  }
+});
 const presenceRef = db.ref("presence");
 const activityRef = db.ref("activity");
 const streakRef = db.ref("streak/checkins");
@@ -571,8 +583,6 @@ function buildSparkTypeRow(){
 
 function listenPresence(){
   presenceRef.on("value", (snap)=>{
-    document.getElementById("conn-dot").className = "conn-dot ok";
-    document.getElementById("conn-label").textContent = "live";
     const data = snap.val() || {};
     presenceState = { darrian: data.darrian || {status:"Free"}, karis: data.karis || {status:"Free"}, spark: data.spark || null, onway: data.onway || null };
     const other = identity === "darrian" ? "karis" : "darrian";
@@ -603,7 +613,7 @@ function listenPresence(){
     }
   }, ()=>{
     document.getElementById("conn-dot").className = "conn-dot bad";
-    document.getElementById("conn-label").textContent = "offline — check your connection";
+    document.getElementById("conn-label").textContent = "can't reach presence data";
   });
 }
 
