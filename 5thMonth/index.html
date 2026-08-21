@@ -944,19 +944,25 @@ Here's to month six, and the one after that, and however many it takes to run ou
   /* ---------------- live counter ---------------- */
   function updateCounter(){
     const now = new Date();
-    let diffMs = now - START_DATE;
-    if(diffMs < 0) diffMs = 0;
-
-    const totalMinutes = Math.floor(diffMs / 60000);
-    const totalHours = Math.floor(totalMinutes / 60);
-    const totalDays = Math.floor(totalHours / 24);
 
     let months = (now.getFullYear() - START_DATE.getFullYear()) * 12 + (now.getMonth() - START_DATE.getMonth());
     if(now.getDate() < START_DATE.getDate()) months--;
     if(months < 0) months = 0;
 
+    // Days/hours/minutes count from the last whole-month mark, not from
+    // START_DATE itself — so they read as "...and this many days/hours/
+    // minutes on top", not a second total that overlaps with the months.
+    const anchor = new Date(START_DATE);
+    anchor.setMonth(anchor.getMonth() + months);
+    let diffMs = now - anchor;
+    if(diffMs < 0) diffMs = 0;
+
+    const totalMinutes = Math.floor(diffMs / 60000);
+    const totalHours = Math.floor(totalMinutes / 60);
+    const days = Math.floor(totalHours / 24);
+
     document.getElementById('c-months').textContent = months;
-    document.getElementById('c-days').textContent = totalDays;
+    document.getElementById('c-days').textContent = days;
     document.getElementById('c-hours').textContent = totalHours % 24;
     document.getElementById('c-mins').textContent = totalMinutes % 60;
   }
