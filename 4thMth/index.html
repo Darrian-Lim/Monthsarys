@@ -405,8 +405,18 @@ const firebaseConfig = {
   messagingSenderId: "YOUR_SENDER_ID",
   appId: "YOUR_APP_ID"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+let db;
+try{
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+}catch(e){
+  console.error("Firebase failed to initialize — features that need the internet will stay disabled.", e);
+  const noopRef = new Proxy(()=>{}, {
+    get: (t, p) => (p === "then" ? undefined : noopRef),
+    apply: () => noopRef
+  });
+  db = { ref: () => noopRef };
+}
 db.ref(".info/connected").on("value", (snap)=>{
   const dot = document.getElementById("conn-dot");
   const label = document.getElementById("conn-label");
