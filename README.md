@@ -12,7 +12,7 @@ A little collection of pages made for Karis, one for each monthsary.
 | 3rd Month                 | [darrian-lim.github.io/Monthsarys/3rdMonth/Index.html](https://darrian-lim.github.io/Monthsarys/3rdMonth/Index.html)               | [3rdMonth/Index.html](3rdMonth/Index.html)               |
 | 4th Month — "Us" app      | [darrian-lim.github.io/Monthsarys/4thMth/index.html](https://darrian-lim.github.io/Monthsarys/4thMth/index.html)                   | [4thMth/index.html](4thMth/index.html)                   |
 | 5th Month — 1st web       | [darrian-lim.github.io/Monthsarys/5thMonth/](https://darrian-lim.github.io/Monthsarys/5thMonth/)                                   | [5thMonth/index.html](5thMonth/index.html)               |
-| 5th Month — 2nd web       | [darrian-lim.github.io/Monthsarys/5thMonth/index01](https://darrian-lim.github.io/Monthsarys/5thMonth/index01)                     | [5thMonth/index01.html](5thMonth/index01)                     |
+| 5th Month — 2nd web       | [darrian-lim.github.io/Monthsarys/5thMonth/index01](https://darrian-lim.github.io/Monthsarys/5thMonth/index01)                     | [5thMonth/index01](5thMonth/index01)                     |
 | 100th Day                 | [darrian-lim.github.io/Monthsarys/100thDay/index.html](https://darrian-lim.github.io/Monthsarys/100thDay/index.html)               | [100thDay/index.html](100thDay/index.html)               |
 
 ## Tools
