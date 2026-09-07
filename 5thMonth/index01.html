@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five Months — Darrian &amp; Karis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,400;1,500&family=Homemade+Apple&family=Mulish:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0c0f1f;
+    --navy:#12172f;
+    --navy-soft:#1a2140;
+    --panel:#f4efe1;
+    --gold:#cda05a;
+    --gold-soft:#e6cd9c;
+    --sage:#8fa585;
+    --star:#c9c9ea;
+    --text-on-dark:#e9e6da;
+    --text-muted:rgba(233,230,218,.62);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--navy);
+    color:var(--text-on-dark);
+    font-family:'Mulish',sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:300;margin:0}
+  .script{font-family:'Homemade Apple',cursive;font-weight:400}
+  a{color:var(--gold)}
+  ::selection{background:rgba(205,160,90,.35)}
+
+  /* ---------- starfield ---------- */
+  .stars{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .stars span{
+    position:absolute;width:2px;height:2px;border-radius:50%;
+    background:var(--star);opacity:.5;
+    animation:twinkle 4.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.95;transform:scale(1.3)}}
+
+  /* ---------- cover ---------- */
+  #cover{
+    position:fixed;inset:0;z-index:50;
+    background:radial-gradient(ellipse at 50% 30%,#1c2348 0%,var(--ink) 72%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;cursor:pointer;gap:18px;padding:24px;
+    transition:opacity 1s ease,transform 1s cubic-bezier(.22,.72,.2,1);
+  }
+  #cover.out{opacity:0;transform:scale(1.04);pointer-events:none}
+  .moon{
+    width:74px;height:74px;border-radius:50%;
+    background:radial-gradient(circle at 35% 32%,#fff6df,var(--gold-soft) 55%,var(--gold) 100%);
+    box-shadow:0 0 50px 6px rgba(230,205,156,.35);
+    animation:breathe 5s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+  #cover .eyebrow{font-size:15px;letter-spacing:.02em;color:var(--text-muted)}
+  #cover h1{font-size:clamp(38px,7vw,64px);font-style:italic;color:var(--text-on-dark)}
+  #cover .hint{font-family:'Homemade Apple',cursive;font-size:20px;color:var(--gold-soft);margin-top:6px}
+
+  main{position:relative;z-index:2}
+  section{padding:clamp(64px,10vw,120px) clamp(24px,6vw,72px)}
+  .wrap{max-width:680px;margin:0 auto}
+  .wrap-wide{max-width:880px;margin:0 auto}
+
+  /* ---------- hero ---------- */
+  #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:0}
+  #hero .kicker{font-family:'Homemade Apple',cursive;font-size:21px;color:var(--gold-soft);transform:rotate(-1deg);margin-bottom:6px}
+  #hero h1{font-size:clamp(48px,9vw,104px);line-height:1.02;letter-spacing:-.01em}
+  #hero h1 em{font-style:italic;color:var(--gold)}
+  #hero p.lede{font-weight:300;font-size:clamp(16px,1.4vw,19px);color:var(--text-muted);max-width:46ch;margin:22px auto 0;line-height:1.75}
+  .counter{
+    margin-top:44px;display:flex;gap:clamp(18px,3vw,36px);justify-content:center;
+    padding-top:28px;border-top:1px solid rgba(230,205,156,.22);
+  }
+  .counter div{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .counter .n{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(30px,4vw,44px);color:var(--gold-soft)}
+  .counter .l{font-size:12px;color:var(--text-muted)}
+  .since{margin-top:20px;font-size:13px;color:var(--text-muted)}
+
+  /* ---------- section heading pattern ---------- */
+  .head{margin-bottom:clamp(28px,4vw,44px)}
+  .head .tag{font-family:'Homemade Apple',cursive;font-size:19px;color:var(--sage);transform:rotate(-1deg);display:inline-block;margin-bottom:6px}
+  .head h2{font-size:clamp(30px,4.5vw,50px);line-height:1.2}
+  .head h2 em{font-style:italic;color:var(--gold)}
+
+  /* ---------- chapters (timeline) ---------- */
+  #chapters{background:var(--navy-soft)}
+  .month{
+    border-top:1px solid rgba(230,205,156,.18);padding:26px 0;cursor:pointer;
+  }
+  .month:last-child{border-bottom:1px solid rgba(230,205,156,.18)}
+  .month .row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .month .row-main{display:flex;align-items:center;gap:20px}
+  .month .frame{
+    flex:none;width:64px;height:64px;border-radius:10px;
+    background:linear-gradient(160deg,var(--navy-soft),var(--ink));
+    border:1px solid rgba(230,205,156,.28);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    box-shadow:0 8px 18px rgba(0,0,0,.3);
+  }
+  .month .frame .doodle{font-size:18px;color:var(--gold-soft)}
+  .month .frame .caption{font-family:'Homemade Apple',cursive;font-size:11px;line-height:1.15;color:var(--text-muted);text-align:center;padding:0 4px}
+  .month .name{font-size:clamp(22px,2.6vw,30px)}
+  .month .date{font-size:13px;color:var(--text-muted);white-space:nowrap;margin-top:2px}
+  .month .body{
+    max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .5s cubic-bezier(.22,.72,.2,1),opacity .4s ease,margin .4s ease;
+  }
+  .month.open .body{max-height:160px;opacity:1;margin-top:14px}
+  .month .body p{margin:0 0 0 84px;font-size:16px;line-height:1.75;color:var(--text-muted);max-width:58ch}
+  .month .mark{margin-left:84px;font-size:13px;color:var(--gold-soft);margin-top:8px}
+
+  /* ---------- reasons ---------- */
+  #why ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:18px}
+  #why li{display:flex;gap:14px;align-items:flex-start;font-size:17px;line-height:1.6;color:var(--text-on-dark)}
+  #why li::before{content:"✧";color:var(--gold);flex:none;line-height:1.6}
+
+  /* ---------- letter ---------- */
+  #letter{display:flex;justify-content:center;background:radial-gradient(ellipse at 50% 0%,#181f42,var(--navy) 60%)}
+  .seal{
+    position:relative;cursor:pointer;width:min(420px,100%);text-align:center;
+    background:linear-gradient(160deg,var(--navy-soft),var(--ink));
+    border:1px solid rgba(230,205,156,.3);border-radius:18px;padding:56px 30px;
+    box-shadow:0 30px 60px rgba(0,0,0,.4);
+    transition:transform .5s cubic-bezier(.22,.72,.2,1);
+  }
+  .seal .moon{width:46px;height:46px;margin:0 auto 22px}
+  .seal h3{font-size:26px;font-style:italic;color:var(--text-on-dark)}
+  .seal .cue{margin-top:10px;font-family:'Homemade Apple',cursive;font-size:19px;color:var(--gold-soft)}
+  .seal.hidden{display:none}
+
+  .page{
+    display:none;width:min(640px,100%);
+    background:var(--panel);color:var(--ink);border-radius:14px;
+    padding:clamp(32px,5vw,58px);box-shadow:0 30px 70px rgba(0,0,0,.45);
+    animation:unfold .8s cubic-bezier(.22,.72,.2,1) both;
+  }
+  .page.show{display:block}
+  @keyframes unfold{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+  .page .date{font-family:'Homemade Apple',cursive;font-size:20px;color:#a3763f;margin-bottom:18px}
+  .page p{font-size:17px;line-height:1.85;margin:0 0 18px;color:#332c22}
+  .page .sign{font-family:'Homemade Apple',cursive;font-size:30px;color:#a3763f;margin-top:6px}
+  .fold{margin-top:26px;display:inline-block;cursor:pointer;font-size:14px;color:#8a8270;border-bottom:1px dashed #8a8270;padding-bottom:2px}
+
+  /* ---------- footer ---------- */
+  footer{text-align:center;padding:56px 24px 70px;border-top:1px solid rgba(230,205,156,.16)}
+  footer .names{font-size:clamp(24px,3vw,34px);font-style:italic;font-family:'Cormorant Garamond',serif;color:var(--gold-soft)}
+  footer .since{margin-top:8px}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001s!important;transition-duration:.001s!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div id="cover">
+  <div class="moon"></div>
+  <div class="eyebrow" id="greeting">good evening, Karis ♡</div>
+  <h1>Five months</h1>
+  <div class="hint" style="font-size:22px">a little collection of us</div>
+  <p style="max-width:32ch;font:300 16px/1.7 'Mulish',sans-serif;color:var(--text-muted)">Something small I made for you. Open it when you have a quiet minute.</p>
+  <div class="hint">made by hand, mostly at night ↷</div>
+  <div class="hint" style="margin-top:6px;background:rgba(230,205,156,.12);border:1px dashed rgba(230,205,156,.5);border-radius:16px;padding:9px 26px">open it ♡</div>
+</div>
+
+<main>
+
+  <section id="hero">
+    <div class="kicker">Darrian &amp; Karis · since 8 April 2026 — still counting ♡</div>
+    <h1>Five months<br><em>of you</em></h1>
+    <p class="lede">Not a milestone so much as a habit I never want to break. Here is the small archive of us — the days counted, the photos kept, the things I would say out loud if I could say them without shaking.</p>
+    <div class="counter">
+      <div><span class="n" id="c-days">0</span><span class="l">days</span></div>
+      <div><span class="n" id="c-hh">00</span><span class="l">hrs</span></div>
+      <div><span class="n" id="c-mm">00</span><span class="l">min</span></div>
+      <div><span class="n" id="c-ss">00</span><span class="l">sec</span></div>
+      <div><span class="n" id="c-next">0</span><span class="l">until the sixth</span></div>
+    </div>
+  </section>
+
+  <section id="chapters">
+    <div class="wrap-wide">
+      <div class="head">
+        <span class="tag">chapter one</span>
+        <h2>Five months, <em>month by month</em></h2>
+      </div>
+      <div id="months"></div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="wrap">
+      <div class="head">
+        <span class="tag">chapter two</span>
+        <h2>A short, <em>incomplete</em> list</h2>
+      </div>
+      <ul id="reasons-list"></ul>
+    </div>
+  </section>
+
+  <section id="letter">
+    <div class="seal" id="seal">
+      <div class="moon"></div>
+      <h3>For Karis</h3>
+      <div class="cue">click to open</div>
+    </div>
+    <div class="page" id="page">
+      <div class="date">8 September 2026</div>
+      <p>My dear pretty girl ❤️</p>
+      <p>It's easy to stand by someone when everything is sunshine and smooth sailing. But staying through the heavy days—when mistakes happen, when life gets messy, and when we aren't at our absolute best—that's where real love proves itself. Loving someone through their flaws, their doubts, and their lowest moments is a far deeper, more beautiful kind of love than just enjoying the easy parts.</p>
+      <p>Thank you for choosing to love me through both: the absolute best days and the hardest ones. Thank you for holding my hand when I feel lost, for accepting every piece of who I am, and for constantly inspiring me to grow. Your patience, your forgiveness, and your grace mean more to me than words can ever really express.</p>
+      <p>I am endlessly grateful that you are mine, and I am so proud to be yours. Just as you've loved every side of me, I love every single version of you—on the high days, the quiet days, and everything in between. You are my partner, my best friend, and my future. I'm not going anywhere, and I'm never letting you go.</p>
+      <p>Mwaahhh</p>
+      <p>Yours and only yours</p>
+      <div class="sign">Poopoo ❤️</div>
+      <div class="fold" id="fold">fold it back up</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="names">Happy five months, Karis</div>
+    <div class="since">Darrian &amp; Karis — since 8 April 2026</div>
+  </footer>
+
+</main>
+
+<script>
+  // starfield
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 5) + 's';
+    s.style.animationDuration = (3 + Math.random() * 4) + 's';
+    starsEl.appendChild(s);
+  }
+
+  // cover dismiss
+  const cover = document.getElementById('cover');
+  cover.addEventListener('click', () => cover.classList.add('out'));
+
+  // dynamic greeting, same rule as the original
+  function greeting() {
+    const h = new Date().getHours();
+    if (h < 5) return 'you should be asleep';
+    if (h < 12) return 'good morning';
+    if (h < 18) return 'good afternoon';
+    return 'good evening';
+  }
+  document.getElementById('greeting').textContent = greeting() + ', Karis ♡';
+
+  // days until the next monthsary (the 8th of the month), same rule as the original
+  function nextMonthsary() {
+    const now = new Date();
+    let d = new Date(now.getFullYear(), now.getMonth(), 8);
+    if (d <= now) d = new Date(now.getFullYear(), now.getMonth() + 1, 8);
+    return Math.ceil((d - now) / 86400000);
+  }
+
+  // live counter
+  const START = new Date('2026-04-08T00:00:00');
+  function tick() {
+    const ms = Date.now() - START.getTime();
+    const days = Math.max(0, Math.floor(ms / 86400000));
+    const hh = Math.floor(ms / 3600000) % 24;
+    const mm = Math.floor(ms / 60000) % 60;
+    const ss = Math.floor(ms / 1000) % 60;
+    const p2 = n => String(n).padStart(2, '0');
+    document.getElementById('c-days').textContent = days;
+    document.getElementById('c-hh').textContent = p2(hh);
+    document.getElementById('c-mm').textContent = p2(mm);
+    document.getElementById('c-ss').textContent = p2(ss);
+    document.getElementById('c-next').textContent = nextMonthsary();
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // months data
+  const MONTHS = [
+    { n: 'month one', month: 'April', date: '8 April 2026', text: 'The nervous month. I checked my phone too often and pretended I hadn\u2019t.', caption: 'the first one', doodle: '♥' },
+    { n: 'month two', month: 'May', date: '8 May 2026', text: 'We stopped filling silences. That was the month I knew.', caption: 'goofy pics of you', doodle: '✧' },
+    { n: 'month three', month: 'June', date: '8 June 2026', text: 'The long calls. You fell asleep talking and I stayed on the line.', caption: 'no reason', doodle: '♡' },
+    { n: 'month four', month: 'July', date: '8 July 2026', text: 'When things started getting better', caption: 'my favourite smile', doodle: '↷' },
+    { n: 'month five', month: 'August', date: '8 August 2026', text: 'Easy. Just plainly, unremarkably easy, which is the rarest thing.', caption: 'the absolute best picture of you', doodle: '♥' }
+  ];
+  const monthsEl = document.getElementById('months');
+  MONTHS.forEach((m, i) => {
+    const row = document.createElement('div');
+    row.className = 'month';
+    row.innerHTML = `
+      <div class="row">
+        <div class="row-main">
+          <div class="frame" style="transform:rotate(${i % 2 ? 2 : -2}deg)">
+            <span class="doodle">${m.doodle}</span>
+            <span class="caption">${m.caption}</span>
+          </div>
+          <div>
+            <div class="name">${m.month}</div>
+            <div class="date">${m.date}</div>
+          </div>
+        </div>
+      </div>
+      <div class="body"><p>${m.text}</p></div>
+      <div class="mark" data-cue></div>`;
+    row.addEventListener('click', () => {
+      row.classList.toggle('open');
+      row.querySelector('[data-cue]').textContent = row.classList.contains('open') ? 'tap to fold' : 'tap to read';
+    });
+    row.querySelector('[data-cue]').textContent = 'tap to read';
+    monthsEl.appendChild(row);
+  });
+
+  // reasons data
+  const REASONS = [
+    'You listen to understand, not just to answer.',
+    'The exact look on your face right before you start laughing.',
+    'You hold space for my thoughts even when they are half-formed.',
+    'The way you make ordinary places feel like somewhere worth staying.',
+    'You never make me feel silly for caring deeply about small things.',
+    'You make the quiet hours feel full instead of lonely.',
+    'Being around you feels like coming home.',
+    'You let me ramble about things you don\u2019t even care about.',
+    'You are remarkably patient with me, even when I am indecisive.',
+    'Loving you is the easiest choice I make every single day.'
+  ];
+  const list = document.getElementById('reasons-list');
+  REASONS.forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    list.appendChild(li);
+  });
+
+  // letter
+  const seal = document.getElementById('seal');
+  const page = document.getElementById('page');
+  const fold = document.getElementById('fold');
+  seal.addEventListener('click', () => {
+    seal.classList.add('hidden');
+    page.classList.add('show');
+  });
+  fold.addEventListener('click', (e) => {
+    e.stopPropagation();
+    page.classList.remove('show');
+    seal.classList.remove('hidden');
+  });
+</script>
+
+</body>
+</html>
