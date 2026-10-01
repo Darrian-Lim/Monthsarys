@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Karis ❤️</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            overflow-y: auto;
+            word-wrap: break-word;
+        }
+
+        #text-container {
+            white-space: pre-wrap;
+        }
+
+        /* Blinking cursor effect */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            background-color: #ffffff;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <span id="text-container"></span><span class="cursor">&nbsp;</span>
+
+    <script>
+        const textToType = "I Love You Karis ❤️\n";
+        const container = document.getElementById("text-container");
+        let index = 0;
+
+        function typeText() {
+            // Append one character at a time
+            container.textContent += textToType[index];
+            index = (index + 1) % textToType.length;
+
+            // Automatically scroll to the bottom as text fills the page
+            window.scrollTo(0, document.body.scrollHeight);
+
+            // Speed set to 5ms for super fast typing
+            setTimeout(typeText, 1); 
+        }
+
+        typeText();
+    </script>
+
+</body>
+</html>
