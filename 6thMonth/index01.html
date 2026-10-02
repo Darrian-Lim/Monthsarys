@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy 6th Monthsary — Darrian &amp; Karis</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A7%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#1b1a2e;
+    --night-deep:#121124;
+    --lav:#c9b6e4;
+    --lav-soft:#9d8ec2;
+    --cream:#f3eefc;
+    --gold:#e3cf8a;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--night);
+    color:var(--cream);
+    font-family:'Cormorant Garamond', serif;
+    font-size:18px;
+    line-height:1.7;
+  }
+  .stars{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+  .stars span{position:absolute;background:var(--cream);border-radius:50%;opacity:.5;animation:twinkle 3.5s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.8}}
+  .wrap{max-width:620px;margin:0 auto;padding:70px 22px;position:relative;z-index:1;}
+  h1,h2,.script{font-family:'Caveat',cursive;font-weight:700;}
+  .hero{text-align:center;}
+  .kicker{font-family:'Caveat',cursive;font-size:20px;color:var(--lav);letter-spacing:.03em;margin-bottom:6px;}
+  h1{font-size:62px;color:var(--cream);margin:0 0 6px;line-height:1.05;}
+  .sub{font-family:'Caveat',cursive;font-size:22px;color:var(--lav-soft);margin:0 0 30px;}
+  .counter{
+    display:inline-flex;gap:22px;
+    border:1px solid #3a3860;
+    border-radius:14px;
+    padding:16px 28px;
+    background:var(--night-deep);
+  }
+  .counter div{text-align:center;}
+  .counter .n{font-size:26px;color:var(--gold);font-family:'Cormorant Garamond',serif;font-weight:600;}
+  .counter .l{font-size:12px;color:var(--lav-soft);text-transform:uppercase;letter-spacing:.08em;}
+
+  section{padding:60px 0;border-top:1px solid #322f55;opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;}
+  section.in{opacity:1;transform:none;}
+  section:first-of-type{border-top:none;padding-top:0;}
+  h2{font-size:36px;color:var(--gold);text-align:center;margin:0 0 6px;}
+  .tag{display:block;text-align:center;font-style:italic;color:var(--lav-soft);font-size:16px;margin-bottom:30px;}
+
+  .months{display:flex;flex-direction:column;gap:14px;}
+  .month{
+    display:flex;gap:16px;align-items:baseline;
+    background:var(--night-deep);
+    border:1px solid #3a3860;
+    border-radius:10px;
+    padding:16px 20px;
+  }
+  .month .m{font-family:'Caveat',cursive;font-size:24px;color:var(--gold);min-width:92px;}
+  .month p{margin:0;font-size:16px;color:var(--cream);}
+
+  .letter{
+    background:var(--night-deep);
+    border:1px solid #3a3860;
+    border-radius:12px;
+    padding:36px 30px;
+  }
+  .letter p{margin:0 0 14px;}
+  .letter .sign{text-align:right;font-family:'Caveat',cursive;font-size:28px;color:var(--gold);margin-top:10px;}
+
+  .reasons{list-style:none;margin:0;padding:0;}
+  .reasons li{
+    position:relative;padding-left:26px;margin-bottom:14px;font-style:italic;color:var(--cream);
+  }
+  .reasons li::before{content:'✦';position:absolute;left:0;color:var(--gold);font-style:normal;}
+
+  .closing{text-align:center;}
+  .closing .script{font-size:30px;color:var(--lav);margin-bottom:10px;}
+  .closing p{max-width:460px;margin:0 auto 14px;color:var(--lav-soft);}
+  .closing .sign{font-family:'Caveat',cursive;font-size:28px;color:var(--gold);}
+
+  footer{text-align:center;padding:30px 0 10px;font-size:12px;color:#55517f;}
+
+  @media(max-width:560px){
+    h1{font-size:48px;}
+    .counter{gap:14px;padding:14px 18px;}
+    .month{flex-direction:column;gap:4px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    section{opacity:1!important;transform:none!important;transition:none!important;}
+    .stars span{animation:none!important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars" aria-hidden="true"></div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="kicker">Darrian &amp; Karis</div>
+    <h1>Happy 6th<br>Monthsary</h1>
+    <p class="sub">since 8 April 2026</p>
+    <div class="counter">
+      <div><div class="n" id="cd-days">—</div><div class="l">days</div></div>
+      <div><div class="n" id="cd-hours">—</div><div class="l">hours</div></div>
+      <div><div class="n" id="cd-mins">—</div><div class="l">minutes</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Journey</h2>
+    <span class="tag">six months, in brief</span>
+    <div class="months">
+      <div class="month"><span class="m">April</span><p>Where it started.</p></div>
+      <div class="month"><span class="m">May</span><p>We stopped filling silences. That was the month I knew.</p></div>
+      <div class="month"><span class="m">June</span><p>Just plainly, unremarkably easy — which is the rarest thing.</p></div>
+      <div class="month"><span class="m">July</span><p>When things started getting better.</p></div>
+      <div class="month"><span class="m">August</span><p>Still going, still us.</p></div>
+      <div class="month"><span class="m">September</span><p>Half a Year.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>A Letter for Karis</h2>
+    <span class="tag">some things are easier to say on paper</span>
+    <div class="letter">
+      <p>Karis,</p>
+      <p>Six months in, and I still catch myself smiling at nothing just because I'm thinking about you.
+         Thank you for being patient with me, for laughing at my bad jokes, and for choosing me every
+         day the same way I keep choosing you.</p>
+      <p>Here's to many more months, many more memories, and many more reasons to write letters like
+         this one.</p>
+      <div class="sign">— Darrian</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Reasons Why I Love You</h2>
+    <span class="tag">just a few of the million reasons</span>
+    <ul class="reasons">
+      <li>You listen to understand, not just to answer.</li>
+      <li>The exact look on your face right before you start laughing.</li>
+      <li>You make the quiet hours feel full instead of lonely.</li>
+      <li>Being around you feels like coming home.</li>
+      <li>Loving you is the easiest choice I make every single day.</li>
+    </ul>
+  </section>
+
+  <section class="closing">
+    <div class="script">Until the next page.</div>
+    <p>Half a year down, and many more pages to go. Thank you for the quiet mornings, the long calls,
+       and everything in between.</p>
+    <div class="sign">— Darrian ✧</div>
+  </section>
+
+  <footer>Darrian &amp; Karis · Forever &amp; Always · © 2026</footer>
+
+</div>
+
+<script>
+  // Starfield (static, decorative only)
+  (function(){
+    const field = document.getElementById('stars');
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement('span');
+      const size = (Math.random() * 2 + 1).toFixed(1);
+      s.style.width = s.style.height = size + 'px';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.animationDelay = (Math.random() * 3.5) + 's';
+      field.appendChild(s);
+    }
+  })();
+
+  // Live "days together" counter
+  (function(){
+    const START = new Date(2026, 3, 8, 0, 0, 0);
+    function tick(){
+      const now = new Date();
+      const diff = Math.max(0, now - START);
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      document.getElementById('cd-days').textContent = days;
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+    }
+    tick();
+    setInterval(tick, 30000);
+  })();
+
+  // Simple scroll-reveal per section
+  (function(){
+    const items = document.querySelectorAll('section');
+    if (!('IntersectionObserver' in window)) { items.forEach(el => el.classList.add('in')); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    items.forEach(el => io.observe(el));
+  })();
+</script>
+</body>
+</html>
