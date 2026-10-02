@@ -13,12 +13,11 @@ A little collection of pages made for Karis, one for each monthsary.
 | 4th Month — "Us" app      | [darrian-lim.github.io/Monthsarys/4thMth/index.html](https://darrian-lim.github.io/Monthsarys/4thMth/index.html)                   | [4thMth/index.html](4thMth/index.html)                   |
 | 5th Month — 1st web       | [darrian-lim.github.io/Monthsarys/5thMonth/](https://darrian-lim.github.io/Monthsarys/5thMonth/)                                   | [5thMonth/index.html](5thMonth/index.html)               |
 | 5th Month — 2nd web       | [darrian-lim.github.io/Monthsarys/5thMonth/index01.html](https://darrian-lim.github.io/Monthsarys/5thMonth/index01.html)           | [5thMonth/index01.html](5thMonth/index01.html)           |
+| 6th Month — 1st web       | [darrian-lim.github.io/Monthsarys/6thMonth/](https://darrian-lim.github.io/Monthsarys/6thMonth/)                                   | [6thMonth/index.html](6thMonth/index.html)               |
+| 6th Month — 2nd web       | [darrian-lim.github.io/Monthsarys/6thMonth/index01.html](https://darrian-lim.github.io/Monthsarys/6thMonth/index01.html)           | [6thMonth/index01.html](6thMonth/index01.html)           |
 | 100th Day                 | [darrian-lim.github.io/Monthsarys/100thDay/index.html](https://darrian-lim.github.io/Monthsarys/100thDay/index.html)               | [100thDay/index.html](100thDay/index.html)               |
-| Special — I Love You      | [darrian-lim.github.io/Monthsarys/I_Love_You_Karis_❤️️.html](https://darrian-lim.github.io/Monthsarys/I_Love_You_Karis_%E2%9D%A4%EF%B8%8F.html) | [I_Love_You_Karis_❤️.html](I_Love_You_Karis_❤️.html)    |
+| Special — I Love You      | [darrian-lim.github.io/Monthsarys/I_Love_You_Karis_❤.html](https://darrian-lim.github.io/Monthsarys/I_Love_You_Karis_%E2%9D%A4%EF%B8%8F.html) | [I_Love_You_Karis_❤️.html](I_Love_You_Karis_❤️.html)    |
 
 ## Tools
 
 * [QR code generator](https://event.pics/en/qr-code-generator.html)
-## The "Us" app
-
-The 4th Month page ([4thMth](4thMth)) is also packaged as an installable Android app (TWA) via PWABuilder — the APK is built to open [darrian-lim.github.io/Monthsarys/4thMth/index.html](https://darrian-lim.github.io/Monthsarys/4thMth/index.html) directly, and it stays live-synced between devices through Firebase.
