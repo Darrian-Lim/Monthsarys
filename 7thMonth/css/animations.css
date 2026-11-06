@@ -1,0 +1,14 @@
+.loader{position:fixed;inset:0;z-index:5;display:grid;place-items:center;background:linear-gradient(#8ea6ff,#ffc8e6);font-size:3rem;transition:opacity 1s ease .1s}
+.loader span{animation:bob 2.4s ease-in-out infinite}
+.loader.done{opacity:0;pointer-events:none}
+@keyframes bob{50%{transform:translateY(-.6rem)}}
+/* title: letters rise in once, with a small overshoot */
+.title span,.eyebrow,.tagline,.sub{opacity:0;transform:translateY(.7em);transition:opacity .8s ease,transform .9s cubic-bezier(.34,1.56,.64,1)}
+.title span{transition-delay:calc(var(--i)*55ms)}
+.tagline{transition-delay:.7s}.sub{transition-delay:1.05s}
+.title-block.on :is(.title span,.eyebrow,.tagline,.sub){opacity:1;transform:none}
+.title-block.off :is(.title span,.eyebrow,.tagline,.sub){opacity:0;transform:translateY(-.5em);transition:all .6s ease;transition-delay:0s}
+.btn:not([hidden]){animation:pop .7s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.7)}}
+.hint:not([hidden]){animation:pop .6s both}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important;transition-delay:0s!important}}

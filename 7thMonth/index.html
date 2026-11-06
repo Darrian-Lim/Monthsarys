@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cloud Nine · Month 7</title>
+<meta name="theme-color" content="#f3c3e6">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/animations.css">
+<!-- three.js is vendored locally (no CDN, works offline) -->
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body>
+<canvas id="world" aria-hidden="true"></canvas>
+<div id="loader" class="loader" aria-hidden="true"><span>☁️</span></div>
+<main class="ui">
+  <header id="title" class="title-block">
+    <p class="eyebrow" data-t="eyebrow"></p>
+    <h1 class="title" id="h1"></h1>
+    <p class="tagline" data-t="tagline"></p>
+    <p class="sub" data-t="subline"></p>
+  </header>
+  <button id="go" class="btn" hidden></button>
+  <p id="hint" class="hint" hidden></p>
+</main>
+<p class="sr">A floating pastel island with a glossy pink 7, a small cat, and presents.</p>
+<noscript><p class="sr">Cloud Nine needs JavaScript.</p></noscript>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

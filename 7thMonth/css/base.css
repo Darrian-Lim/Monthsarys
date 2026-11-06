@@ -1,0 +1,22 @@
+:root{--ink:#4a2b6b;--pink:#ff86c0;--lav:#b79cff;
+--font:ui-rounded,"Arial Rounded MT Bold","Varela Round","Nunito",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden;background:#e9c9f3;color:#fff;font-family:var(--font);-webkit-tap-highlight-color:transparent}
+#world{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:manipulation}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.ui{position:fixed;inset:0;pointer-events:none;padding:max(5vh,env(safe-area-inset-top)) 6vw max(5vh,env(safe-area-inset-bottom));
+display:flex;flex-direction:column;align-items:flex-start;gap:1.6rem}
+.title-block{max-width:32rem;text-shadow:0 2px 0 #c55fb1,0 8px 24px rgba(110,60,190,.45)}
+.eyebrow{font-size:.85rem;letter-spacing:.35em;font-weight:700;opacity:.95}
+.title{font-size:clamp(3.4rem,12vw,7.2rem);line-height:.95;margin:.25rem 0 .6rem;font-weight:800;-webkit-text-stroke:.1em #c25aad;paint-order:stroke fill;text-shadow:0 .06em 0 #c25aad,0 .12em .3em rgba(110,60,190,.4)}
+.title .w{display:inline-block;white-space:nowrap}.title span{display:inline-block}
+.tagline{font-size:clamp(1.05rem,2.6vw,1.4rem);font-weight:700}
+.sub{margin-top:.35rem;opacity:.92}
+.btn{pointer-events:auto;font:inherit;font-weight:800;font-size:1.15rem;color:#fff;border:0;border-radius:999px;padding:.95rem 2.1rem;cursor:pointer;
+background:linear-gradient(180deg,#ff9ccf,#ff6fb0);box-shadow:0 6px 0 #d4458d,0 14px 28px rgba(160,60,160,.35);text-shadow:0 1px 0 #d4458d}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #d4458d}
+.btn:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.hint{position:fixed;left:50%;bottom:max(4vh,env(safe-area-inset-bottom));transform:translateX(-50%);padding:.55rem 1.1rem;border-radius:999px;
+background:rgba(74,43,107,.55);backdrop-filter:blur(6px);font-size:.95rem;white-space:nowrap}
+@media (max-width:760px),(max-aspect-ratio:1/1){.ui{align-items:center;text-align:center}.hint{white-space:normal;width:max-content;max-width:86vw;text-align:center}}
+.no-webgl body{background:linear-gradient(#8ea6ff,#cdb4ff 55%,#ffc8e6)}
