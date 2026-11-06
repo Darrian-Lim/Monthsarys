@@ -67,7 +67,8 @@ export function createWorld(canvas, cfg) {
   addEventListener('pointermove', e => { tx = (e.clientX / W) * 2 - 1; ty = (e.clientY / H) * 2 - 1; });
   function loop(now) {
     raf = requestAnimationFrame(loop);
-    const dt = Math.max(0, Math.min(0.05, (now - last) / 1000 || 0.016));  // rAF's timestamp can precede performance.now() on the first frame last = now; time += dt;
+    const dt = Math.max(0, Math.min(0.05, (now - last) / 1000 || 0.016));
+    last = now; time += dt;   // (rAF's timestamp can precede performance.now() on the first frame, hence the Math.max)
     stepTweens(dt); ups.forEach(f => f(time, dt));
     px += (tx - px) * 0.05; py += (ty - py) * 0.05;
     const P = reduce.matches ? 0 : 1;
@@ -82,8 +83,8 @@ export function createWorld(canvas, cfg) {
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : raf || start()));
 
   return {
-    scene, camera, rig, setSky, setComp, start, stop,
-    add: o => scene.add(o), onUpdate: f => ups.push(f),
+    scene, camera, canvas, rig, setSky, setComp, start, stop,
+    add: o => scene.add(o), onUpdate: f => { ups.push(f); return () => { const i = ups.indexOf(f); if (i >= 0) ups.splice(i, 1); }; },
     get time() { return time; }, get reduced() { return reduce.matches; },
     async ready() { try { await renderer.compileAsync(scene, camera); } catch (e) { /* first frame will compile */ } renderer.render(scene, camera); },
     dispose() { stop(); scene.traverse(o => { o.geometry?.dispose(); [].concat(o.material || []).forEach(m => m.dispose()); }); renderer.dispose(); },

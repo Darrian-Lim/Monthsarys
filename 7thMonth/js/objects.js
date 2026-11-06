@@ -76,15 +76,52 @@ export const createString = () => mesh(new THREE.CylinderGeometry(0.012, 0.012, 
 const UP = new THREE.Vector3(0, 1, 0), _d = new THREE.Vector3();
 export function setString(m, a, b) { m.position.copy(a).add(b).multiplyScalar(0.5); _d.copy(b).sub(a); m.scale.y = _d.length(); m.quaternion.setFromUnitVectors(UP, _d.normalize()); }
 
-// ── present: body, ribbon, bow, and a lid on a hinge (lid.rotation.x opens it in Scene 2) ──
+// ── present: rounded box, surface-mounted satin bands, and a clean hinged lid ──
 export function createGift(s, c, rb = '#fff4c2') {
-  const g = new THREE.Group(), h = s * 0.72, box = (w, hh, d, y, z = 0) => mesh(new THREE.BoxGeometry(w, hh, d), gloss(rb), 0, y, z);
-  g.add(mesh(new RoundedBoxGeometry(s, h, s, 4, s * 0.07), gloss(c), 0, h / 2, 0), box(s * 0.2, h * 1.01, s * 1.01, h / 2), box(s * 1.01, h * 1.01, s * 0.2, h / 2));
-  const lid = new THREE.Group(); lid.position.set(0, h, -s * 0.54); g.add(lid);
-  lid.add(mesh(new RoundedBoxGeometry(s * 1.08, s * 0.24, s * 1.08, 4, s * 0.06), gloss(c), 0, s * 0.12, s * 0.54), box(s * 0.2, s * 0.25, s * 1.09, s * 0.125, s * 0.54), box(s * 1.09, s * 0.25, s * 0.2, s * 0.125, s * 0.54));
-  for (const r of [0.6, -0.6]) { const l = mesh(new THREE.TorusGeometry(s * 0.15, s * 0.05, 10, 24), gloss(rb), r * s * 0.2, s * 0.34, s * 0.54); l.scale.set(1, 1.2, 0.7); l.rotation.z = r; lid.add(l); }
-  lid.add(mesh(new THREE.SphereGeometry(s * 0.07, 12, 10), gloss(rb), 0, s * 0.3, s * 0.54));
-  return { group: g, lid };
+  const g = new THREE.Group();
+  const h = s * 0.72;
+  const ribbon = gloss(rb);
+  const bodyMat = gloss(c);
+  const band = (w, hh, d, x, y, z, radius = s * 0.018) => {
+    const b = mesh(new RoundedBoxGeometry(w, hh, d, 3, radius), ribbon, x, y, z);
+    g.add(b);
+    return b;
+  };
+
+  // Main box. Satin bands sit just outside the surface to avoid z-fighting.
+  g.add(mesh(new RoundedBoxGeometry(s, h, s, 6, s * 0.075), bodyMat, 0, h / 2, 0));
+  const bw = s * 0.155;
+  const strip = s * 0.035;
+  // Bands on the four vertical faces.
+  band(bw, h * 0.98, strip, 0, h / 2, s / 2 + strip * 0.35);
+  band(bw, h * 0.98, strip, 0, h / 2, -s / 2 - strip * 0.35);
+  band(strip, h * 0.98, bw, s / 2 + strip * 0.35, h / 2, 0);
+  band(strip, h * 0.98, bw, -s / 2 - strip * 0.35, h / 2, 0);
+  // Two clean bands on the top of the box, beneath the lid.
+  band(bw, strip, s * 0.98, 0, h + strip * 0.15, 0);
+  band(s * 0.98, strip, bw, 0, h + strip * 0.15, 0);
+
+  // Hinge pivot is at the back edge of the lid. The lid geometry is built in
+  // front of that pivot so rotation opens it cleanly instead of clipping through.
+  const lid = new THREE.Group();
+  lid.position.set(0, h, -s * 0.52);
+  g.add(lid);
+  const lidDepth = s * 1.08;
+  const lidCenterZ = s * 0.52;
+  lid.add(mesh(new RoundedBoxGeometry(s * 1.08, s * 0.22, lidDepth, 6, s * 0.055), bodyMat, 0, s * 0.11, lidCenterZ));
+  // Satin cross only lies on the lid's upper surface; no intersecting full-height boxes.
+  lid.add(mesh(new RoundedBoxGeometry(bw, s * 0.035, lidDepth * 0.96, 3, s * 0.012), ribbon, 0, s * 0.232, lidCenterZ));
+  lid.add(mesh(new RoundedBoxGeometry(s * 1.04, s * 0.035, bw, 3, s * 0.012), ribbon, 0, s * 0.232, lidCenterZ));
+  // Small soft bow loops sit on top of the lid and move with it.
+  for (const side of [-1, 1]) {
+    const loop = mesh(new THREE.TorusGeometry(s * 0.115, s * 0.035, 12, 28), ribbon,
+      side * s * 0.13, s * 0.31, lidCenterZ);
+    loop.scale.set(1.0, 1.28, 0.72);
+    loop.rotation.z = side * 0.42;
+    lid.add(loop);
+  }
+  lid.add(mesh(new THREE.SphereGeometry(s * 0.055, 16, 12), ribbon, 0, s * 0.30, lidCenterZ));
+  return { group: g, lid, height: h };
 }
 
 // ── Cloud Cat: glossy cream vinyl-toy cat. Faces +z. ──

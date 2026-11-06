@@ -12,3 +12,4 @@
 @keyframes pop{from{opacity:0;transform:scale(.7)}}
 .hint:not([hidden]){animation:pop .6s both}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important;transition-delay:0s!important}}
+@media (prefers-reduced-motion:reduce){.panel,.toast{transition:none!important}.confetti.burst i{animation-duration:.01ms!important}}
