@@ -40,8 +40,6 @@
 .pol:hover .pol-photo img{transform:scale(1.04);filter:brightness(1.04) saturate(1.05)}
 .pol.reserved .pol-photo{aspect-ratio:1}
 .pol-cap{font-family:var(--f-hand);font-size:1.35rem;color:#5d4572;padding:.35rem 0 .55rem;line-height:1.1}
-.pol.reserved .pol-card{background:transparent;border:2px dashed rgba(93,69,114,.45);box-shadow:none}
-.pol.reserved .pol-photo{background:repeating-linear-gradient(45deg,rgba(255,255,255,.35) 0 10px,transparent 10px 20px);display:grid;place-items:center;color:#7d6492;font-family:var(--f-display);font-style:italic;font-size:.9rem;padding:1rem}
 .pol .sticker{position:absolute;right:-8px;bottom:42px;width:30px;height:30px;transform:scale(0) rotate(-20deg);transition:transform .5s var(--spring);z-index:3}
 .pol.seen .sticker{transform:scale(1) rotate(12deg)}
 
@@ -56,17 +54,16 @@
 @keyframes lidDown{from{transform:translateY(-115%);opacity:0}to{transform:none;opacity:1}}
 .case-base{width:110%;height:52px;border-radius:.4rem .4rem 1rem 1rem;background:linear-gradient(180deg,#f7dfa4 0 6px,#5e4482 6px);box-shadow:0 20px 40px rgba(20,10,40,.35);display:grid;place-items:center}
 .case-base span{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:#f2dca8;font-weight:800}
-.flip-polaroid{position:relative;width:min(300px,74vw);perspective:1200px}
+.flip-polaroid{position:relative;width:min(300px,74vw);perspective:1200px;-webkit-perspective:1200px}
 .fp-front,.fp-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:4px;box-shadow:0 20px 40px rgba(20,10,40,.35);transition:transform .9s var(--ease)}
 .fp-front{position:relative;padding:12px 12px 0;background:#fffefb;text-align:center}
-.fp-back{overflow:auto}
 .fp-photo{width:100%;min-height:8rem;background:#f3ecf6;display:grid;place-items:center;color:#7d6492;font-family:var(--f-display);font-style:italic}
 .fp-photo img{display:block;width:100%;height:auto;max-height:52vh;object-fit:contain}
-.fp-photo.empty{aspect-ratio:1;padding:1rem}
+.fp-photo.empty{aspect-ratio:1}
 .fp-caption{font-family:var(--f-hand);font-size:1.7rem;color:#5d4572;padding-top:.4rem}
 .fp-back{transform:rotateY(180deg);padding:1.4rem 1.3rem;background:#fffaf2;background-image:repeating-linear-gradient(180deg,transparent 0 1.9rem,rgba(141,119,196,.18) 1.9rem calc(1.9rem + 1px));display:flex;flex-direction:column;gap:.6rem}
 .fp-date{font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--lav-deep)}
-.fp-note{font-family:var(--f-hand);font-size:1.6rem;line-height:1.2;color:#4b3567}
+.fp-note{font-family:var(--f-hand);font-size:1.6rem;line-height:1.2;color:#4b3567;flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .fp-note .ph{font-family:var(--f-body);font-size:.9rem;line-height:1.4}
 .fp-stamp{margin-top:auto;align-self:flex-end;width:3rem;height:3rem;border-radius:50%;display:grid;place-items:center;border:2px solid var(--rose);color:var(--rose);font-size:1.3rem;transform:rotate(-14deg);opacity:.7}
 .flip-polaroid.flipped .fp-front{transform:rotateY(-180deg)}
@@ -100,7 +97,7 @@
 .lc-front i{display:block;width:22px;height:20px;margin-bottom:.5rem;background:var(--rose);clip-path:path("M11 19C4 14 1 10 1 6.5 1 3.5 3.5 1 6.2 1 8.4 1 10 2.3 11 4c1-1.7 2.6-3 4.8-3C18.5 1 21 3.5 21 6.5 21 10 18 14 11 19z")}
 .lc-front b{position:absolute;bottom:7%;font-size:.56rem;letter-spacing:.18em;color:var(--ink-faint)}
 .lcard::after{content:"";position:absolute;inset:0;border-radius:999px 999px 10px 10px;pointer-events:none;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.55) 45%,rgba(255,220,240,.35) 50%,transparent 62%);background-size:250% 100%;background-position:var(--mx,120%) 0;mix-blend-mode:soft-light;opacity:0;transition:opacity .3s}
-.lcard:hover::after{opacity:1}
+@media (hover:hover){.lcard:hover::after{opacity:1}}
 .niche.rare{background:radial-gradient(ellipse at 50% 0,rgba(255,220,160,.45),transparent 60%),linear-gradient(180deg,#3a2147,#4d2a50)}
 .niche.rare .lc-back{background:conic-gradient(from 0deg,#ffd6e5,#f7dfa4,#d9c8ff,#c8f0ec,#ffd6e5);border-color:#fff2d0;box-shadow:inset 0 0 0 5px rgba(255,255,255,.55)}
 .niche.rare .lc-back .seal{background:radial-gradient(circle at 35% 30%,#ffe7a8,#c99b52)}
@@ -181,7 +178,7 @@
 .star.found .star-label{opacity:.95}
 .star.edge-l .star-label{left:8px;transform:none;text-align:left}
 .star.edge-r .star-label{left:auto;right:8px;transform:none;text-align:right}
-.star:hover .star-label{opacity:1}
+@media (hover:hover){.star:hover .star-label{opacity:1}}
 .star:not(.found) .star-label{font-weight:600;color:#cfc4ec}
 .legend{display:flex;justify-content:center;gap:1.3rem;margin-top:1rem;font-size:.78rem;color:#cfc4ec;letter-spacing:.08em}
 .legend span{display:flex;align-items:center;gap:.4rem}
@@ -228,3 +225,13 @@
 /* photos fade in softly once they have loaded */
 img.fade{opacity:0;transition:opacity .7s ease}
 img.fade.loaded{opacity:1}
+
+/* the reserved polaroid: a real frame with undeveloped film, waiting for the next memory */
+.pol.reserved .pol-photo,.fp-photo.empty{position:relative;display:grid;place-items:center;overflow:hidden;background:linear-gradient(150deg,#4a3d63,#6c5a86 45%,#8a74a0)}
+.pol.reserved .pol-photo::after,.fp-photo.empty::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.16) 45%,transparent 60%);background-size:250% 100%;animation:filmShimmer 5s ease-in-out infinite}
+@keyframes filmShimmer{0%{background-position:120% 0}100%{background-position:-120% 0}}
+.pol-empty{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.45rem;padding:.8rem;text-align:center}
+.pol-empty svg{width:42%;max-width:72px;fill:none;stroke:rgba(255,240,248,.85);stroke-width:2.2;stroke-linejoin:round}
+.pol-empty svg .h{fill:#f7b6cd;stroke:none}
+.pol-empty em{font-family:var(--f-hand);font-style:normal;font-size:clamp(1rem,1.5vw,1.2rem);line-height:1.1;color:#fff4fa;opacity:.92}
+.fp-photo.empty .pol-empty em{font-size:1.45rem}

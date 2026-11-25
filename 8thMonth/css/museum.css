@@ -48,7 +48,7 @@ body:not(.is-loading) .loader{opacity:0;visibility:hidden}
 .btn-primary{color:#fff;background:linear-gradient(180deg,#f0a3bf,#d9729a);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 10px 26px rgba(201,102,140,.42),0 0 0 6px rgba(255,255,255,.12)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 16px 34px rgba(201,102,140,.5),0 0 0 8px rgba(255,255,255,.16)}
 .btn-primary:active{transform:translateY(1px) scale(.98)}
-.btn-ghost{color:var(--ink);background:rgba(255,253,249,.75);border:1px solid rgba(214,170,91,.6);backdrop-filter:blur(8px)}
+.btn-ghost{color:var(--ink);background:rgba(255,253,249,.75);border:1px solid rgba(214,170,91,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .btn-ghost:hover{background:#fffdf9;transform:translateY(-2px)}
 .btn-ghost.light{color:#fff;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.45)}
 .btn-small{padding:.6rem 1.1rem;font-size:.9rem;color:#fff;background:linear-gradient(180deg,#b9a3e6,#8d77c4);box-shadow:0 6px 16px rgba(110,80,170,.28)}
@@ -118,15 +118,15 @@ body:not(.is-loading) .loader{opacity:0;visibility:hidden}
 .hud{position:fixed;z-index:20;left:0;right:0;top:0;height:var(--hud-h);display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:max(.7rem,env(safe-area-inset-top)) max(1rem,env(safe-area-inset-right)) .7rem max(1rem,env(safe-area-inset-left));pointer-events:none;animation:hudIn .9s var(--ease) both}
 @keyframes hudIn{from{opacity:0;transform:translateY(-12px)}}
 .hud>*{pointer-events:auto}
-.hud-brand{display:flex;align-items:center;gap:.5rem;padding:.5rem .95rem .5rem .7rem;border-radius:999px;background:rgba(255,253,249,.78);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.8);box-shadow:0 6px 20px rgba(60,40,90,.12);font-family:var(--f-display);font-style:italic;font-weight:600;font-size:.95rem;color:var(--ink)}
+.hud-brand{display:flex;align-items:center;gap:.5rem;padding:.5rem .95rem .5rem .7rem;border-radius:999px;background:rgba(255,253,249,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.8);box-shadow:0 6px 20px rgba(60,40,90,.12);font-family:var(--f-display);font-style:italic;font-weight:600;font-size:.95rem;color:var(--ink)}
 .hud-brand svg{width:20px;fill:var(--rose-deep)}
-.hud-progress{display:flex;align-items:center;gap:.5rem;padding:.35rem .9rem .35rem .4rem;border-radius:999px;background:rgba(255,253,249,.78);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.8);box-shadow:0 6px 20px rgba(60,40,90,.12);line-height:1.05}
+.hud-progress{display:flex;align-items:center;gap:.5rem;padding:.35rem .9rem .35rem .4rem;border-radius:999px;background:rgba(255,253,249,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.8);box-shadow:0 6px 20px rgba(60,40,90,.12);line-height:1.05}
 .hud-progress svg{width:34px;height:34px;transform:rotate(-90deg)}
 .ring-bg{fill:none;stroke:#efe4f0;stroke-width:4}
 .ring{fill:none;stroke:url(#none);stroke:var(--rose);stroke-width:4;stroke-linecap:round;stroke-dasharray:100.5;stroke-dashoffset:100.5;transition:stroke-dashoffset 1s var(--ease)}
 .hud-progress b{font-size:.95rem;color:var(--ink)}.hud-progress small{display:block;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:800}
 .hud-actions{display:flex;gap:.45rem}
-.hud-btn{position:relative;width:2.75rem;height:2.75rem;border-radius:50%;display:grid;place-items:center;background:rgba(255,253,249,.78);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.8);box-shadow:0 6px 20px rgba(60,40,90,.12);transition:transform .2s var(--spring)}
+.hud-btn{position:relative;width:2.75rem;height:2.75rem;border-radius:50%;display:grid;place-items:center;background:rgba(255,253,249,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.8);box-shadow:0 6px 20px rgba(60,40,90,.12);transition:transform .2s var(--spring)}
 .hud-btn:hover{transform:translateY(-2px)}
 .hud-btn svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .hud-btn .badge{position:absolute;top:-3px;right:-3px;min-width:1.15rem;height:1.15rem;padding:0 .25rem;border-radius:999px;background:var(--rose);color:#fff;font-size:.68rem;font-weight:800;display:grid;place-items:center}
@@ -139,7 +139,7 @@ body.dark-hud .hud-brand svg{fill:#f3b6cd}
 
 /* ═════════════════════ MODALS ═════════════════════ */
 .modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:1rem}
-.modal-backdrop{position:absolute;inset:0;background:rgba(36,24,56,.55);backdrop-filter:blur(6px);animation:fadeIn .4s ease both}
+.modal-backdrop{position:absolute;inset:0;background:rgba(36,24,56,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fadeIn .4s ease both}
 @keyframes fadeIn{from{opacity:0}}
 .modal.closing .modal-backdrop{animation:fadeOut .35s ease both}
 @keyframes fadeOut{to{opacity:0}}
@@ -176,7 +176,7 @@ body.dark-hud .hud-brand svg{fill:#f3b6cd}
 .keepsakes b{display:block;font-family:var(--f-display);font-style:italic;font-weight:600}
 .keepsakes small{display:block;color:var(--ink-soft);font-size:.82rem;line-height:1.4}
 
-.toast{position:fixed;z-index:60;left:50%;bottom:max(1.4rem,env(safe-area-inset-bottom));transform:translate(-50%,20px);max-width:min(30rem,calc(100vw - 2rem));padding:.75rem 1.15rem;border-radius:999px;background:rgba(45,32,70,.88);color:#fff;font-size:.92rem;text-align:center;opacity:0;pointer-events:none;transition:opacity .3s,transform .4s var(--spring);backdrop-filter:blur(8px);box-shadow:0 10px 30px rgba(30,15,50,.3)}
+.toast{position:fixed;z-index:60;left:50%;bottom:max(1.4rem,env(safe-area-inset-bottom));transform:translate(-50%,20px);max-width:min(30rem,calc(100vw - 2rem));padding:.75rem 1.15rem;border-radius:999px;background:rgba(45,32,70,.88);color:#fff;font-size:.92rem;text-align:center;opacity:0;pointer-events:none;transition:opacity .3s,transform .4s var(--spring);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 10px 30px rgba(30,15,50,.3)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ═════════════════════ RESPONSIVE ═════════════════════ */

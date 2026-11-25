@@ -552,28 +552,52 @@
   function setupSong(k) {
     const btn = $('#kvPlay'), note = $('#plNote'), seek = $('#plSeek'), vol = $('#plVol'), box = $('#kvPlayer');
     const fill = (el) => el.style.setProperty('--p', (el.value / el.max * 100) + '%');
-    if (!k.src) { btn.disabled = true; seek.disabled = true; note.textContent = 'Add a song in content.js (src) to play it here.'; return; }
-    const s = new Audio(); s.preload = 'metadata'; s.src = k.src; s.volume = .8; song = s;
-    let dragging = false;
+    // no song set in content.js: show the record player and its words, but no controls that can't do anything
+    if (!k.src) { box.hidden = true; return; }
+    const s = new Audio(); s.preload = 'metadata'; s.volume = .8; song = s;
+    let dragging = false, failed = false, loadT = 0, gain = null;
+    // iPads and iPhones ignore audio.volume, so there the song is routed through a Web Audio gain node instead
+    const fixedVolume = (() => { try { const t = new Audio(); t.volume = .5; return t.volume === 1; } catch (e) { return false; } })();
+    const volRow = vol.closest('.pl-row');
+    const route = () => {
+      if (!fixedVolume) return;
+      if (gain) { AUDIO.context(); return; }   // make sure the context is awake before the song plays through it
+      try { const c = AUDIO.context(); if (!c) throw 0; const n = c.createMediaElementSource(s); gain = c.createGain(); gain.gain.value = vol.value / 100; n.connect(gain).connect(c.destination); }
+      catch (e) { gain = null; volRow.hidden = true; }   // no way to change the volume here: hide the slider rather than show one that does nothing
+    };
     fill(vol); fill(seek);
-    const playing = on => { if (song !== s) return; const o = $('#kvObject').firstElementChild; if (o) o.classList.toggle('playing', on);
+    const setControls = on => { seek.disabled = vol.disabled = !on; box.classList.toggle('off', !on); };
+    const playing = on => { if (song !== s) return; clearTimeout(loadT); const o = $('#kvObject').firstElementChild; if (o) o.classList.toggle('playing', on);
       box.classList.toggle('on', on); btn.textContent = on ? '❚❚' : '▶'; btn.setAttribute('aria-label', on ? 'Pause the song' : 'Play the song');
       note.textContent = on ? 'now playing ♫' : (s.currentTime > 0 ? 'paused' : 'tap ▶ to play'); AUDIO.duck(on); };
-    s.addEventListener('error', () => { if (song !== s) return; playing(false); btn.disabled = true; seek.disabled = true; note.textContent = 'Song file not found: ' + k.src; });
+    // the song can't be reached (missing file, offline…): say so kindly and offer to try again
+    const unavailable = msg => { if (song !== s) return; failed = true; playing(false); setControls(false);
+      btn.textContent = '↻'; btn.setAttribute('aria-label', 'Try loading the song again'); note.textContent = msg || 'The song couldn’t load right now. Tap ↻ to try again.'; };
+    const load = () => { failed = false; setControls(true); s.src = k.src; s.load(); };
+    s.addEventListener('error', () => { if (s.getAttribute('src')) unavailable(); });
     s.addEventListener('loadedmetadata', () => { if (song === s) $('#plDur').textContent = mmss(s.duration); });
     s.addEventListener('timeupdate', () => { if (song !== s || dragging || !s.duration) return; seek.value = Math.round(s.currentTime / s.duration * 1000); fill(seek); $('#plCur').textContent = mmss(s.currentTime); });
     s.addEventListener('ended', () => playing(false));
     s.addEventListener('pause', () => playing(false));
     s.addEventListener('playing', () => playing(true));
-    btn.addEventListener('click', () => { if (s.paused) { AUDIO.start(); note.textContent = 'loading…'; s.play().catch(() => { if (song === s) note.textContent = 'Tap ▶ again to play'; }); } else s.pause(); });
+    btn.addEventListener('click', () => {
+      if (failed) { note.textContent = 'trying again…'; btn.textContent = '▶'; btn.setAttribute('aria-label', 'Play the song'); load(); return; }
+      if (!s.paused) { s.pause(); return; }
+      AUDIO.start(); route(); note.textContent = 'loading…';
+      clearTimeout(loadT); loadT = setTimeout(() => { if (song === s && s.paused) unavailable('Still loading… tap ↻ to try again.'); }, 15000);
+      s.play().catch(err => { if (song !== s || failed) return; clearTimeout(loadT); if (err && err.name === 'NotAllowedError') note.textContent = 'Tap ▶ again to play'; });
+    });
     seek.addEventListener('input', () => { dragging = true; fill(seek); if (s.duration) $('#plCur').textContent = mmss(seek.value / 1000 * s.duration); });
     seek.addEventListener('change', () => { dragging = false; if (s.duration) s.currentTime = seek.value / 1000 * s.duration; });
-    vol.addEventListener('input', () => { s.volume = vol.value / 100; fill(vol); $('#plVolN').textContent = vol.value; });
+    vol.addEventListener('input', () => { s.volume = vol.value / 100; if (gain) gain.gain.value = vol.value / 100; fill(vol); $('#plVolN').textContent = vol.value; });
+    load();
   }
   function stopSong() { const s = song; song = null; if (s) { try { s.pause(); s.removeAttribute('src'); s.load(); } catch (e) {} } AUDIO.duck(false); }
 
   /* ═════════════ GALLERY 02 ═════════════ */
   let caseIdx = 0;
+  // an empty frame that looks deliberate: an undeveloped polaroid, waiting for the next memory
+  const RESERVED = '<span class="pol-empty"><svg viewBox="0 0 48 40" aria-hidden="true"><rect x="3" y="9" width="42" height="28" rx="6"/><path d="M16 9l3-5h10l3 5"/><circle cx="24" cy="23" r="8"/><path d="M24 26.5s-4-2.4-4-5a2.1 2.1 0 0 1 4-1 2.1 2.1 0 0 1 4 1c0 2.6-4 5-4 5z" class="h"/></svg><em>reserved for our next memory</em></span>';
   function buildG2() {
     const items = M.memories.items, wall = $('#polaroids');
     const rot = [-3, 2.5, -1.5, 3, -2.5, 1.5, -1], str = [30, 64, 42, 78, 36, 58, 48];
@@ -581,7 +605,7 @@
       <div class="pol${m.photo ? '' : ' reserved'}${S.found.g2.includes(i) ? ' seen' : ''}" data-i="${i}" style="--r:${rot[i % 7]}deg;--str:${str[i % 7]}px;--sw:${(5 + (i % 3)).toFixed(1)}s;--sd:${(-i * 1.3).toFixed(1)}s">
         <span class="pol-nail" aria-hidden="true"></span>
         <button class="pol-card" type="button" aria-label="Open the display case: ${esc(clean(m.caption))}">
-          <div class="pol-photo">${m.photo ? `<img class="fade" src="${esc(m.photo)}" alt="${esc(m.alt || '')}" loading="lazy" decoding="async">` : 'reserved for our next memory'}</div>
+          <div class="pol-photo">${m.photo ? `<img class="fade" src="${esc(m.photo)}" alt="${esc(m.alt || '')}" loading="lazy" decoding="async">` : RESERVED}</div>
           <p class="pol-cap">${esc(clean(m.caption))}</p>
         </button>
         <span class="sticker">${ART.keepsake.pin}</span>
@@ -600,7 +624,7 @@
     const ph = $('#casePhoto');
     if (m.photo) {
       ph.classList.remove('empty'); ph.innerHTML = `<img class="fade" src="${esc(m.photo)}" alt="${esc(m.alt || '')}" decoding="async">`;
-    } else { ph.classList.add('empty'); ph.textContent = 'reserved for our next memory'; }
+    } else { ph.classList.add('empty'); ph.innerHTML = RESERVED; }
     $('#caseCaption').textContent = clean(m.caption);
     $('#caseDate').textContent = clean(m.date) || 'a little memory';
     $('#caseNote').innerHTML = paras(m.note);

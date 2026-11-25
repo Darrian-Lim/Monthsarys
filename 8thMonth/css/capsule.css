@@ -175,7 +175,7 @@
 
 /* ═══ a keepsake taken out and held in focus ═══ */
 .kv{position:fixed;inset:0;z-index:50;overflow:hidden auto;overscroll-behavior:contain;display:grid;place-items:center;padding:1.2rem}
-.kv-backdrop{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 42%,rgba(110,70,110,.74),rgba(38,22,46,.9));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .5s ease}
+.kv-backdrop{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 42%,rgba(110,70,110,.74),rgba(38,22,46,.9));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .5s ease}
 .kv.in .kv-backdrop{opacity:1}
 .kv-stage{position:relative;display:flex;align-items:center;justify-content:center;gap:clamp(1.2rem,4vw,3rem);width:min(900px,100%);pointer-events:none}
 .kv-stage>*{pointer-events:auto}
@@ -273,6 +273,8 @@
 .pl-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-5.5px;border-radius:50%;background:#fff6ec;box-shadow:0 1px 4px rgba(0,0,0,.35)}
 .pl-row input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:50%;background:#fff6ec;box-shadow:0 1px 4px rgba(0,0,0,.35)}
 .pl-row svg{flex:none;width:16px;height:16px;fill:none;stroke:#fff6ec;stroke-width:2;stroke-linecap:round}
+.kv-player.off .pl-row{opacity:.45}
+.kv-player.off .kv-play{background:radial-gradient(circle at 35% 30%,#e9d6c8,#b98a6e)}
 .pl-note{display:block;margin-top:.35rem;font-size:.72rem;opacity:.8;overflow-wrap:anywhere}
 
 /* gift card: a little ticket */

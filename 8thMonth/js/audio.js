@@ -29,7 +29,7 @@
     const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2600;
     delay.connect(fb).connect(lp).connect(delay); delay.connect(wet).connect(master);
     musicBus.connect(master); musicBus.connect(delay); sfxBus.connect(master); sfxBus.connect(delay);
-    document.addEventListener('visibilitychange', () => { if (!ctx) return; document.hidden ? ctx.suspend() : (!muted && ctx.resume()); if (audioEl) document.hidden ? audioEl.pause() : (!muted && audioEl.play().catch(() => {})); });
+    document.addEventListener('visibilitychange', () => { if (!ctx) return; document.hidden ? ctx.suspend() : ctx.resume(); if (audioEl) document.hidden ? audioEl.pause() : (!muted && audioEl.play().catch(() => {})); });
     return true;
   }
 
@@ -98,6 +98,8 @@
 
   window.AUDIO = {
     get muted() { return muted; },
+    /* the shared audio context (created on first use, inside a tap) */
+    context() { if (!ctx && !build()) return null; if (ctx.state !== 'running') ctx.resume(); return ctx; },
     start() {
       if (started) return; started = true;
       if (!ctx && !build()) return;

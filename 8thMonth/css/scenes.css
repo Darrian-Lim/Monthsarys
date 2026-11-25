@@ -39,7 +39,7 @@
 .arch-in{position:relative;display:block;width:100%;height:100%;border-radius:999px 999px 6px 6px;overflow:hidden;background:var(--room);box-shadow:inset 0 0 30px rgba(40,20,60,.28)}
 .arch-in::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 85%,rgba(255,250,235,.6),transparent 60%);opacity:.5;transition:opacity .6s}
 .arch-emblem{display:block;position:absolute;left:50%;top:50%;width:62%;transform:translate(-50%,-50%);transition:transform .6s var(--spring),filter .6s,opacity .6s}
-.arch:hover .arch-emblem{transform:translate(-50%,-56%) scale(1.06)}
+@media (hover:hover){.arch:hover .arch-emblem{transform:translate(-50%,-56%) scale(1.06)}}
 .arch-emblem svg{width:100%;height:auto;display:block;filter:drop-shadow(0 6px 10px rgba(40,20,60,.25))}
 .arch-floor{display:block;position:absolute;left:-10%;right:-10%;bottom:-6%;height:24%;background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.35),transparent 70%)}
 /* undiscovered: a sheer veil hangs across the doorway, with a tiny "new" sparkle */
@@ -74,7 +74,7 @@
 .pedestal.open .pd-rays{opacity:1}
 .glass-dome{position:relative;z-index:1;display:grid;place-items:center;width:70%;aspect-ratio:1/1.12;border-radius:999px 999px 6px 6px;overflow:hidden;background:linear-gradient(115deg,rgba(255,255,255,.6),rgba(255,255,255,.1) 40%,rgba(255,255,255,.28));border:1.5px solid rgba(255,255,255,.95);box-shadow:inset 0 0 26px rgba(255,255,255,.65),inset 0 -12px 20px rgba(255,200,220,.35),0 10px 30px rgba(120,70,90,.15)}
 .dome-heart{width:46%;aspect-ratio:1;background:radial-gradient(circle at 35% 30%,#ffe3ec,#e88fae 55%,#c9668c);-webkit-mask:var(--heart) center/contain no-repeat;mask:var(--heart) center/contain no-repeat;transform:scale(.9);opacity:.6;transition:opacity 1s}
-.dome-frost{position:absolute;inset:0;background:radial-gradient(circle at 50% 55%,rgba(255,255,255,.35),rgba(255,255,255,.75) 70%),repeating-linear-gradient(60deg,rgba(255,255,255,.18) 0 3px,transparent 3px 7px);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);transition:opacity 1.4s ease}
+.dome-frost{position:absolute;inset:0;background:radial-gradient(circle at 50% 55%,rgba(255,255,255,.35),rgba(255,255,255,.75) 70%),repeating-linear-gradient(60deg,rgba(255,255,255,.18) 0 3px,transparent 3px 7px);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);transition:opacity 1.4s ease}
 .dome-shine{position:absolute;inset:9% 60% 32% 14%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.9),transparent)}
 .dome-knob{position:absolute;z-index:2;top:-9px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3dc,#c99a76);box-shadow:0 2px 4px rgba(120,70,40,.3)}
 .pedestal-top{position:relative;z-index:1;width:90%;height:13px;border-radius:7px;background:linear-gradient(90deg,#c99a76,#f6dcc0,#c08d6c);margin-top:-2px}
